@@ -21,6 +21,7 @@ import Customer from './components/customer/customer';
 import VerifyCustomer from './components/admin/verifycustomer'
 import ImageUploader from './components/admin/imageupload';
 import CustomerProfile from './components/customer/customerprofile'
+import EmployeeList from './components/admin/employeelist';
 
 
 import { MyContextProvider } from './components/MyContext';
@@ -85,7 +86,7 @@ function App() {
       <Route path = '/verifycustomers' element = {<VerifyCustomer></VerifyCustomer>}></Route>
       <Route path = '/image' element = {<ImageUploader></ImageUploader>}></Route>
       <Route path = '/customerprofile' element = {<CustomerProfile></CustomerProfile>}></Route>
-
+      <Route path = '/employeelist' element = {<EmployeeList></EmployeeList>}></Route>
 
     </Routes>
     

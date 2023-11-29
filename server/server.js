@@ -74,6 +74,22 @@ app.post('/customer', (req, res) => {
     })
 })
 
+app.get('/employee', (req, res) => {
+    let query = `SELECT * FROM employees`
+    connection.query(query, (err, results) => {
+        res.send(results);
+    })
+})
+
+app.post('/employee', (req, res) => {
+    employee = req.body;
+    let salaryQuery = `INSERT INTO salary(salary_rate, effectivity_date)`;
+    let insertQuery = `INSERT INTO employees(last_name, first_name, department, position, address, active_salary, req_time_in, req_time_out) VALUES (?,?,?,?,?,?,?,?)`;;
+    values = [employee.newLastName, employee.newFirstName, employee.newDepartment, employee.newPosition, employee.newAddress, employee.newSalary, employee.newTimeIn, employee.newTimeOut];
+    connection.execute(insertQuery, values);
+
+})
+
 app.get('/products', (req, res) => {
     let query = `SELECT * FROM products`;
     connection.query(query, (err, results) => {
