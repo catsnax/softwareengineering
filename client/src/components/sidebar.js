@@ -9,7 +9,7 @@ function Sidebar() {
     let tester = window.confirm("Are you sure you want to logout?")
     
     if(tester == true){
-        window.location.replace('/loginemp');
+        window.location.replace('/');
 }}
 )
 

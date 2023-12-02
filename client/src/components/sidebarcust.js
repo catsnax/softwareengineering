@@ -9,7 +9,7 @@ function CustomerSidebar() {
         let tester = window.confirm("Are you sure you want to logout?")
         
         if(tester == true){
-            window.location.replace('/logincus');
+            window.location.replace('/');
     }}
     )
     const activeLinkStyle = {

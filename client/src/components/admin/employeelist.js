@@ -2,6 +2,7 @@ import React, {useState, useEffect}  from 'react';
 import Sidebar from '../sidebar';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
+import ExcelReader from '../excelreader';
 
 const modalStyles = {
     modalContainer: {
@@ -135,6 +136,7 @@ const handleCreate = (event) => {
             <button className="h-[30px] w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick = {openModal}>
             Register Employee
             </button>
+            <ExcelReader></ExcelReader>
           </div>
         </div>
         <div className="flex flex-col w-10/12 shadow-lg mt-5">
@@ -165,17 +167,7 @@ const handleCreate = (event) => {
 
             
           })}
-          
-
-        
-
-
-
           </div>
-
-          
-
-
           {/* Additional employee entries can be added as needed */}
         </div>
          {/* Modal */}

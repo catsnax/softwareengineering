@@ -441,25 +441,43 @@ app.post('/regcus', (req, res) => {
 })
 
 app.post('/logincus', (req, res) => {
-    const query = `SELECT * FROM customers WHERE username = '${req.body.username}'`;
-    
-    connection.query(query, (err, results) => {
+    const customerQuery = `SELECT * FROM customers WHERE username = '${req.body.username}'`;
+    const adminQuery = `SELECT * FROM admins WHERE username = '${req.body.username}'`;
+
+
+    connection.query(adminQuery, (err, results) => {
+        console.log(results);
         if(results.length != 0){
             if(results[0].password == req.body.password){
-                res.json({customerID: results[0].customer_id});
+                res.json({userID: results[0].user_id, userType: "admin"});
             }
             else{
                 console.log("password wrong");
             }
         }
+        else{
+            connection.query(customerQuery, (err, results) => {
+                if(results.length != 0){
+                    if(results[0].password == req.body.password){
+                        res.json({userID: results[0].customer_id, userType: "customer"});
+                    }
+                    else{
+                        console.log("password wrong");
+                    }
+                }
+            })
+
+        }
     })
+
+    
 })
 
 app.post('/loginemp' ,(req, res) => {
     console.log(req.body);
     const query = `SELECT * FROM admins WHERE username = '${req.body.username}'`;
     
-    connection.query(query, (err, results) => {
+    connection.query(adminQuery, (err, results) => {
         console.log(results);
         if(results.length != 0){
             if(results[0].password == req.body.password){

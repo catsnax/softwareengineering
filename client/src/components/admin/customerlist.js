@@ -22,7 +22,7 @@ const modalStyles = {
     borderRadius: '5px',
     padding: '20px',
     width: '500px',
-    height: '400px',
+    height: '480px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   },
   modalContent: {
@@ -37,6 +37,15 @@ const CustomerList = () => {
   const [contactNumber, setContactNumber] = useState([])
   const [id, setID] = useState([]);
 
+  const [newLastName, setNewLastName] = useState([]);
+  const [newFirstName, setNewFirstName] = useState([]);
+  const [gender, setGender] = useState([]);
+  const [phoneNumber, setPhoneNumber] = useState([]);
+  const [fax, setFax] = useState([]);
+  const [billAddress, setBillAddress] = useState([]);
+  const [shipAddress, setShipAddress] = useState([]);
+
+
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -44,6 +53,28 @@ const CustomerList = () => {
   const openModal = () => {
     setModalOpen(true);
   }
+
+const handleInputLast = (event) =>{
+    setNewLastName(event.target.value);
+  }
+const handleInputFirst = (event) =>{
+    setNewFirstName(event.target.value);
+  }
+const handleInputGender = (event) =>{
+  setGender(event.target.value);
+}
+const handleInputPhoneNumber = (event) =>{
+  setPhoneNumber(event.target.value);
+}
+const handleInputFax = (event) =>{
+  setFax(event.target.value);
+}
+const handleInputBillAddress = (event) =>{
+  setBillAddress(event.target.value);
+}
+const handleInputShipAddress = (event) =>{
+  setShipAddress(event.target.value);
+}
 
   const[status, setStatus]= useState([]);
 
@@ -56,9 +87,13 @@ const CustomerList = () => {
         setFirstName(data.map((row) => row.first_name));
         setContactNumber(data.map((row) => row.contact_number))
         setStatus(data.map((row) => row.verified != 0 ? 'VERIFIED' : 'UNVERIFIED'))
-
     })
 }, [])
+
+  const handleCreate = (() => {
+
+
+  })
 
   
 
@@ -77,8 +112,9 @@ const CustomerList = () => {
         </div>
         <div className="font-bold text-2xl mt-5">Customer List</div>
         <div className="flex flex-col w-10/12 mt-5">
-          <div className="flex justify-end">
-            <Link to="/verifycustomers"><button className="h-[30px] w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]">
+          <div className="flex justify-end gap-2">
+            <button onClick = {openModal} className="h-[30px] w-[150px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]"> Add Customer</button>
+            <Link to="/verifycustomers"><button className="h-[30px] w-[150px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]">
               + Verify Customers
             </button></Link>
           </div>
@@ -121,49 +157,56 @@ const CustomerList = () => {
         </div>
       </div>
 
-      {isModalOpen && (
-        <div style={modalStyles.modalContainer}>
-          <div style={modalStyles.modal}>
-            <div style={modalStyles.modalContent}>
-              <div className="text-center text-xl font-bold mb-9">Order Details</div>
-              <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
-                {/* Add input fields for editing */}
+      {/* Modal */}
+         {isModalOpen && (
+                    <div style={modalStyles.modalContainer}>
+                      <div style={modalStyles.modal}>
+                        <div style={modalStyles.modalContent}>
+                          <div className="text-center text-xl font-bold mb-9">Register Employee</div>
+                          <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
+                        
+                              <div className="flex gap-4">
+                              <h2 className="">Last Name </h2>
+                                <input value = {newLastName} onChange = {(event) => handleInputLast(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
+                              </div>
 
-                <div className="flex flex-row bg-[#D9D9D9] w-[460px] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
-            <div className="flex"></div>
+                              <div className="flex gap-4">
+                              <h2 className="">First Name </h2>
+                                <input value = {newFirstName} onChange = {(event) => handleInputFirst(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
+                              </div>
 
-            
-       
-            <div className="flex-1 ml-2">Class</div>
-            <div className="flex-1">Quantity Order</div>
-            <div className="flex-1">Total Price</div>
-          </div>
-                {lastName.map((value, index) => {
-                  return(
-                  <div className='flex ml-2 flex-row w-full mt-2'>
-                  <div className='flex-1'>aaron</div>
-                  <div className='flex-1'>aaron</div>
-                  <div className='flex-1'>aaron</div>
-                  
-                  </div>
-                )})}
-                
-                
-                {/* Add more input fields for editing */}
-                <div className='flex flex-col items-center gap-6 mt-[20px]'>
-                  
-                  <button
-                    onClick={closeModal}
-                    className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+                              <div className="flex gap-4">
+                              <h2 className="">Phone Number </h2><input value = {phoneNumber} onChange = {handleInputPhoneNumber} class= " rounded-lg bg-teal-500 h-6 w-[160px]" type='text' placeholder='' ></input>
+
+                              </div>
+
+                              <div className="flex gap-4">
+                              <h2 className="">Fax Number </h2> <input value = {fax} onChange = {handleInputFax}class=" rounded-lg bg-teal-500 h-6 w-[160px]" type='text' placeholder='' ></input>
+
+                              </div>
+
+                              <div className="flex gap-4">
+                              <h2 className="">Bill Address </h2> <input value = {billAddress} onChange = {handleInputBillAddress}class=" rounded-lg bg-teal-500 h-6 w-[160px]" type='text' placeholder='' ></input>
+
+                              </div>
+
+                              <div className="flex gap-4">
+                              <h2 className="">Shipping Address</h2> <input value = {shipAddress} onChange = {handleInputShipAddress} class=" rounded-lg bg-teal-500 h-6 w-[160px]" type='text' placeholder='' ></input>
+
+                              </div>
+
+
+
+                      
+                            <div className='flex flex-col items-center gap-6 mt-[0px]'>
+                              <button onClick = {handleCreate}> Submit </button>
+                              <button onClick={closeModal} className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end">Close </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
     </div>
   );
 };

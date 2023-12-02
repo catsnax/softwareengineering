@@ -72,9 +72,7 @@ function App() {
       <Route path = "/registercust" element = {<RegisterCustomer></RegisterCustomer>}></Route>
       <Route path = "/registeremp" element = {<RegisterEmployee></RegisterEmployee>}></Route>
       <Route path = "/repack" element = {<Repack></Repack>}></Route>
-      <Route path = "" element = {<LandingPage></LandingPage>}></Route>
-      <Route path='/logincus' element={<LoginCustomer></LoginCustomer>}></Route>
-      <Route path='/loginemp' element={<LoginEmployee></LoginEmployee>}></Route>
+      <Route path='' element={<LoginCustomer></LoginCustomer>}></Route>
       <Route path='/regcus' element={<RegisterCustomer></RegisterCustomer>}></Route>
       <Route path='/regemp' element={<RegisterEmployee></RegisterEmployee>}></Route>
       <Route path='/customerlist' element={<CustomerList></CustomerList>}></Route>
