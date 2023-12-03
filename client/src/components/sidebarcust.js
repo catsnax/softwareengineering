@@ -17,7 +17,7 @@ function CustomerSidebar() {
     };
     
     return (
-      <div className=' flex-col bg-[#303535] items-center flex w-[250px] h-screen fixed rounded'>
+      <div className='flex-col bg-[#303535] items-center flex w-[250px] h-[100%] fixed rounded'>
         <div className='pt-1 w-10/12'>
           <img
             src={logo}

@@ -44,7 +44,8 @@ function AdminSalesTransaction(){
       const [remainingQuantity, setRemainingQuantity] = useState([]);
       const [visibility, setVisibility] = useState([]);
     
-    
+      const [firstNames, setFirstNames]  = useState([]);
+      const [lastNames, setLastNames] = useState([]);   
 
       const [weight, setWeight] = useState();
       const[totalPrice, setTotalPrice] = useState();
@@ -70,6 +71,25 @@ function AdminSalesTransaction(){
       closeModal();
     }, 2000); // 2000 milliseconds (2 seconds)
   };
+
+  useEffect(() => {
+    for(let i = 0; i < inputValues.length; i++){
+      sum += productPrice[i] * inputValues[i]
+      console.log(sum);
+    }
+    setTotalPrice(sum)
+  })
+
+  //get customer list
+  useEffect(() => {
+    fetch('http://localhost:4000/salescustomer')
+    .then(res => {return res.json()})
+    .then(data => {
+        setLastNames(data.map((row) => row.last_name));
+        setFirstNames(data.map((row) => row.first_name));
+    })  
+  }, []);
+
 
   useEffect(() => {
     fetch('http://localhost:4000/sales')
@@ -142,9 +162,27 @@ function AdminSalesTransaction(){
           
           <div className='font-bold text-2xl mt-2'>Sales Transaction</div>
           
+          
           <div className='flex flex-col w-8/12 shadow-lg'>
+
+          
+          <div className = "flex w-[250px] gap-10 mt-8">
+            <div className = ""> Pick Customer </div>
+            <select className='h-[30px] mr-[720px] w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] justify-start border-black hover:bg-[#F3F3F3]'>
+          
+          {firstNames.map((value, index) => {
+
+            return(
+              <option className = "w-48"> {lastNames[index]}, {firstNames[index]}</option>
+            )
+          })}
+
+          
+          </select>
+          </div>
+
             
-            <div className='flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm mt-5 h-16 justify-center items-center font-bold border-black shadow-md '>
+            <div className='flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm mt-2 h-16 justify-center items-center font-bold border-black shadow-md '>
               <div className='flex-1'>Class Type</div>
               <div className='flex-1'>Available</div>
               <div className = 'flex-1'> Price </div>
@@ -182,9 +220,7 @@ function AdminSalesTransaction(){
                 </div>
                 <div className='flex-1'></div>
                 <div className='flex-1'>
-                <button className='h-[30px] w-[150px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]' onClick={openModal}>
-                + Add Product
-                </button>
+              
                 {/* Modal */}
                   {isModalOpen && (
                     <div style={modalStyles.modalContainer}>
@@ -228,11 +264,8 @@ function AdminSalesTransaction(){
             </div>
 
             <div className="flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md border-t-0 rounded-b-sm">
-                <div className="flex-1 ml-8 text-left">Total bought = 1500 kg</div>
-                <div className="flex-1 text-left">Total Price =  50000php</div>
-                <div className="flex-1 "><button onClick = {handleSubmit} className='h-[30px] w-[150px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]'>
-               Submit
-                </button></div>
+                <div className="flex-1 text-left">Total Price: {totalPrice}</div>
+                <div className="flex-1 "><button onClick = {handleSubmit} className='h-[30px] w-[150px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]'>Submit</button></div>
                 
               </div>
 

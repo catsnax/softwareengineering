@@ -525,6 +525,15 @@ app.post('/salesreport', (req, res) => {
     })
 })
 
+app.get('/salescustomer', (req, res) => {
+    query = `SELECT * FROM customers`;
+    connection.query(query, (err, results) => {
+        res.send(results);
+        console.log(results);
+    })
+
+})
+
 
 
 

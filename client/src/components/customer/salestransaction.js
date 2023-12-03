@@ -49,8 +49,6 @@ function SalesTransaction(){
   const [productPrice, setProductPrice] = useState([]);
   const [remainingQuantity, setRemainingQuantity] = useState([]);
   const [visibility, setVisibility] = useState([]);
-    
-    
 
   const [weight, setWeight] = useState();
   const[totalPrice, setTotalPrice] = useState();
@@ -66,6 +64,24 @@ function SalesTransaction(){
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    for(let i = 0; i < inputValues.length; i++){
+      sum += productPrice[i] * inputValues[i]
+      console.log(sum);
+    }
+    setTotalPrice(sum)
+  })
+
+  const handleInputChange = (index, newValue) => {
+    const updatedValues = [...inputValues];
+    updatedValues[index] = newValue;
+    setInputValues(updatedValues);
+    for(let i = 0; i < productPrice.length; i++){
+      sum += productPrice[i] * inputValues[i]
+      console.log(sum)
+    }
+};
 
 
   const handleAddProduct = () => {
@@ -101,10 +117,6 @@ function SalesTransaction(){
     })  
   }, []);
 
-  
-
-  
-
   const resetArrayToZero = () => {
     // Create a new array with all elements set to 0
     const newArray = new Array(inputValues.length).fill('');
@@ -112,15 +124,7 @@ function SalesTransaction(){
     setInputValues(newArray);
   };
 
-  const handleInputChange = (index, newValue) => {
-    const updatedValues = [...inputValues];
-    updatedValues[index] = newValue;
-    setInputValues(updatedValues);
-    for(let i = 0; i < productPrice.length; i++){
-      sum += productPrice[i] * inputValues[i]
-    }
-
-  };
+  
 
   const handleSubmit = (event) =>{
     let tester = window.confirm("Try to press")
@@ -199,9 +203,6 @@ function SalesTransaction(){
                 </div>
                 <div className='flex-1'></div>
                 <div className='flex-1'>
-                <button className='h-[30px] w-[150px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]' onClick={openModal}>
-                + Add Product
-                </button>
                 {/* Modal */}
                   {isModalOpen && (
                     <div style={modalStyles.modalContainer}>
@@ -239,8 +240,7 @@ function SalesTransaction(){
             </div>
 
             <div className="flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md border-t-0 rounded-b-sm">
-                <div className="flex-1 ml-8 text-left">Total bought = 1500 kg</div>
-                <div className="flex-1 text-left">Total Price =  50000php</div>
+                <div className="flex-1 text-left ml-24">Total Price: {totalPrice}</div>
                 <div className="flex-1 "><button onClick = {handleSubmit}  className='h-[30px] w-[150px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]'>
                Submit
                 </button></div>

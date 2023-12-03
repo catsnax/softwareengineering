@@ -122,7 +122,7 @@ function CustomerProfile() {
         </div>
         <div className="font-bold text-2xl mt-5">Customer</div>
 
-        <div className="bg-[#D9D9D9] h-[150px] w-10/12 border-[1.5px] border-black mt-[20px] font-bold shadow-md rounded-sm">
+        <div className="bg-[#D9D9D9] h-[150px] w-5/12 border-[1.5px] border-black mt-[20px] font-bold shadow-md rounded-sm">
           <div className="flex">
             <div className="rounded-full border-2 bg-white h-[100px] w-[100px] ml-8 mt-5 border-white "></div>
             

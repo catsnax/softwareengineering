@@ -124,9 +124,8 @@ function Customer() {
 
         <div className="bg-[#D9D9D9] h-[150px] w-10/12 border-[1.5px] border-black mt-[20px] font-bold shadow-md rounded-sm">
           <div className="flex">
-            <div className="rounded-full border-2 bg-white h-[100px] w-[100px] ml-8 mt-5 border-white "></div>
-            
-            <div className="flex-col ml-[100px] w-[150px] text-left mt-4 whitespace-nowrap">
+
+            <div className="flex-col ml-[5%] w-[150px] text-left mt-4 whitespace-nowrap">
             <div class="">{profile.last_name}, {profile.first_name}</div>
               
               <div class="">Fax: {profile.fax_number}</div>
@@ -145,7 +144,7 @@ function Customer() {
             <div className="flex-[0.1]"></div>
             <div className="flex-1">Date Ordered</div>
             <div className="flex-1">Quantity</div>
-            <div className="flex-1">Total</div>
+            <div className="flex-1">Total Cost</div>
             <div className = "flex-1">Status</div>
           </div>
 
@@ -160,7 +159,7 @@ function Customer() {
               </div>
               <div className="flex-1">{new Date(date[index]).toLocaleDateString('en-US')}</div>
               <div className="flex-1">50 boxes</div>
-              <div className="flex-1">P{totalAmount[index]}</div>
+              <div className="flex-1">₱{totalAmount[index].toFixed().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
               <div className="flex-1">{status[index]}</div>
             </div>
             )

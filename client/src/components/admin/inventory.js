@@ -41,7 +41,8 @@ function Inventory(){
 
     const [isModalOpen, setModalOpen] = useState(false);
 
-    const openModal = () => {
+    const openModal = (event) => {
+      event.preventDefault();
       setModalOpen(true);
     };
   
@@ -177,7 +178,7 @@ if(value == 1){
 }
 })}
 
-<button className="h-[30px] w-[200px] bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick={openModal}> + Register Sacks</button>
+<button className="h-[30px] w-[200px] bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick={(event)=>openModal(event)}> + Register Sacks</button>
     {isModalOpen && (
                     <div style={modalStyles.modalContainer}>
                       <div style={modalStyles.modal}>

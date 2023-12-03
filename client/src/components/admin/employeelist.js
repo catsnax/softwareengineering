@@ -209,13 +209,13 @@ const handleCreate = (event) => {
                               </div>
 
                               <div className="flex gap-4">
-                              <h2 className="">Time In </h2>
-                                <input value = {newTimeIn} onChange = {(event) => handleTimeInChange(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
+                              <h2 className="">Working Schedule Time In </h2>
+                                <input type= "time" value = {newTimeIn} onChange = {(event) => handleTimeInChange(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
                               </div>
 
                               <div className="flex gap-4">
-                              <h2 className="">Time Out </h2>
-                                <input value = {newTimeOut} onChange = {(event) => handleTimeOutChange(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
+                              <h2 className="">Working Schedule Time Out </h2>
+                                <input type = "time" value = {newTimeOut} onChange = {(event) => handleTimeOutChange(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
                               </div>
                            
                             

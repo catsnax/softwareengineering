@@ -81,11 +81,7 @@ const handleSearch = (event) => {
                 setOrderCost(data.map((row) => row.total_amount));
                 setOrderStatus(data.map((row) => row.order_status));
 
-                orderCost.map((value, index) => {
-                    sum += value;
-                    setTotalCost(sum);
-                    console.log("hi");
-                })
+                
             }
         })
           .catch(error => console.error(error))
@@ -93,6 +89,14 @@ const handleSearch = (event) => {
     setTimeout(() => {
     }, 2000);
   };
+
+  useEffect(() => {
+    orderCost.map((value, index) => {
+        sum += value;
+        setTotalCost(sum);
+        console.log("hi");
+    })
+  })
 
   return (
     <div className="w-screen min-h-screen flex">
@@ -112,7 +116,10 @@ const handleSearch = (event) => {
           <div className="flex justify-end">
             <div className="h-[30px] mr-2 mt-1"> Date</div>
             <input type = "date" onChange = {(event) => {setDate(event.target.value)}} className="h-[30px] mr-1 w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" />
-           <button onClick = {handleSearch} className="h-[30px] w-[120px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]"> Search</button>
+            <input type = "date" onChange = {(event) => {setDate(event.target.value)}} className="h-[30px] mr-1 w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" />
+
+           <button onClick = {handleSearch} 
+           className="h-[30px] w-[120px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]"> Search</button>
            
             
           </div>
