@@ -193,7 +193,7 @@ useEffect(() => {
           </button>
         </div>
         <div className='font-bold text-2xl mt-5'>Sales Ordering</div>
-        <div className='flex flex-col w-10/12'>
+        <div className='flex flex-col mb-[-10px] w-10/12'>
           <div className='flex justify-end'>
           <select value = {selectedFilter} onChange ={(event) => {handleFilterChange(event.target.value)} }className = "w-40 ml-4">
             <option value="Rejected">Rejected</option>
@@ -203,11 +203,17 @@ useEffect(() => {
             <option value="Delivered">Delivered</option>
           </select>
           <button className = "mr-2 bg-[#3BC4AF] text-white p-2" onClick = {handleFilter}> Filter Results </button>
+          <Link to="/salesreport">
+              <button className='h-[30px] w-[150px] bg-[#D9D9D9] h-10 mr-2 rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]'>
+              + Sales Report
+              </button>
+            </Link>
             <Link to="/adminsalestransaction">
-              <button className='h-[30px] w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]'>
+              <button className='h-[30px] w-[170px] bg-[#D9D9D9] h-10 rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]'>
                 + Create Transaction
               </button>
             </Link>
+            
             
           </div>
         </div>
@@ -239,8 +245,8 @@ useEffect(() => {
             <div className='flex-1'> 
             
 
-          
-            {(status[index] == "Delivered") ? (<div>Delivered</div>) : 
+            {(status[index] == "Rejected") ? <div> Rejected</div> : 
+            <span> {(status[index] == "Delivered") ? (<div>Delivered</div>) : 
             <select value = {status[index]} onChange={(e) => handleInputChange(index, e.target.value)}> 
             <option value = "Rejected"> Rejected </option>
             {(status[index] == "Pending Approval") ? (<option value="Pending Approval">Pending Approval</option>) : <span></span>}
@@ -249,7 +255,8 @@ useEffect(() => {
             <option value="Shipped">Shipped</option> 
             <option value="Delivered">Delivered</option> 
           </select>
-           }
+           }</span>}
+            
             </div>
           </div>) 
             })}

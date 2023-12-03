@@ -203,11 +203,21 @@ app.post('/sales', (req, res) => {
 
 app.post('/changestatus', (req, res) => {
     for(let i = 0; i < req.body.id.length; i++){
-       // console.log(req.body);
         if(req.body.oldStatus[i] != req.body.newStatus[i]){
             let insertQuery = `INSERT INTO status_log(order_id, user_id, previous_order_status, new_order_status, status_date) VALUES (?,?,?,?,?)`
             let values = [req.body.id[i], req.body.adminID, req.body.oldStatus[i], req.body.newStatus[i], new Date()];
             connection.execute(insertQuery, values); //create id something
+
+            if(req.body.newStatus[i] == "Rejected"){
+                let returnQuery = `SELECT * FROM order_item WHERE order_id = ${req.body.id[i]}`
+                connection.query(returnQuery, (err, results) => {
+                    for(let j = 0; j < results.length; j++){
+                        productQuery = `UPDATE products SET total_quantity = total_quantity + ${results[j].quantity} WHERE product_id = ${results[j].product_id}`;
+                        connection.execute(productQuery);
+                    }
+                })
+            }
+
         }
         
     }
@@ -291,10 +301,6 @@ app.post('/inventory', (req, res) => {
             
     }
     })
-
-
-
-
     })
     
     
@@ -302,6 +308,7 @@ app.post('/inventory', (req, res) => {
 
 app.post('/sacks', (req, res) => {
     let insertStockQuery = 'INSERT INTO stockin_sack(stockin_sack_date, sack_quantity) VALUES (?, ?)';
+    console.log(req.body)
     values = [req.body.date, req.body.sacks];
     connection.execute(insertStockQuery, values);
     connection.query(`SELECT MAX(stockin_sack_id) FROM stockin_sack;`, (err, result) =>{
@@ -507,6 +514,15 @@ app.post('/repackdetails', (req, res) => {
     })
 
 
+})
+
+app.post('/salesreport', (req, res) => {
+    console.log(req.body);
+    dateQuery = `SELECT order_id, order_date, total_amount, order_status, orders.customer_id, last_name, first_name FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id WHERE (DATE(order_date) = '${req.body.date}') AND (order_status = 'Delivered' OR order_status = 'Shipped')`
+    connection.query(dateQuery, (err, result) => {
+        console.log(result);
+        res.send(result);
+    })
 })
 
 

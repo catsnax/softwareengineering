@@ -3,6 +3,9 @@ import {Link, Route, Routes} from "react-router-dom";
 import Sidebar from './sidebar';
 import { Icon } from '@iconify/react';
 
+const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+
+
 const modalStyles = {
   modalContainer: {
     position: 'fixed',
@@ -35,8 +38,10 @@ const SacksInventory = () => {
   const [newProductName, setNewProductName] = useState('');
   const [newProductQuantity, setNewProductQuantity] = useState('');
 
+  const nowDate = new Date()
+
   const [newQuantity, setNewQuantity] = useState();
-  const [newDate, setNewDate] = useState();
+  const [newDate, setNewDate] = useState(`${nowDate.getFullYear()}-${nowDate.getMonth()}-${nowDate.getDate()}`);
 
   const [sackQuantity, setSackQuantity] = useState([]);
   const [sackDate, setSackDate] = useState([]);
@@ -62,18 +67,19 @@ const SacksInventory = () => {
 
 
     const handleSubmit = (event) =>{
+
         let tester = window.confirm("Try to press")
         //create confirmation modal of sales order
         if(tester == true){
           event.preventDefault();
-          console.log("submitted");
+          console.log("submitted")
           const url = 'http://localhost:4000/sacks';
           fetch(url, {
               method: 'POST',
               headers: {
               'Content-Type': 'application/json'
               },
-              body: JSON.stringify({sacks: newQuantity, date: newDate})
+              body: JSON.stringify({sacks: newQuantity, date: newDate })
           })
           .then(response => response.json())
           .catch(error => console.error(error))
@@ -124,15 +130,8 @@ const SacksInventory = () => {
                           <div className="text-center text-xl font-bold mb-9">Add Sacks</div>
                           <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
                             <h2 className="flex-1 flex ml-10">
-                              <b className="flex-1">Date Input </b>
-                              <div className="flex-1">
-                                <input
-                                  type = "date"
-                                  value = {newDate}
-                                  onChange={(event) => setNewDate(event.target.value)}
-                                  className="rounded-lg bg-teal-500 h-6 w-[105px]"
-                                />
-                              </div>
+                            
+
                             </h2>
                             <h2 className="flex-1 flex ml-10">
                               <b>Number of Sacks </b>

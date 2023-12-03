@@ -33,7 +33,7 @@ function CustomerSidebar() {
         <div className='w-full mt-10'>
           <NavLink to="/customersalestransaction" activeClassName="active-link">
             <button className="delay-30 w-10/12 hover:bg-[#3BC4AF] h-[70px] text-white rounded-sm">
-              <div className='flex flex-row place-items-center pl-11'><Icon icon="mdi:shopping-outline" className='h-[40px] w-[35px] mr-4' /><b>Sales</b></div>
+              <div className='flex flex-row place-items-center pl-11'><Icon icon="mdi:shopping-outline" className='h-[40px] w-[35px] mr-4' /><b>Order</b></div>
             </button>
           </NavLink>
         </div>
@@ -41,7 +41,7 @@ function CustomerSidebar() {
         <div className='w-full'>
           <NavLink to="/customer" activeClassName="active-link">
             <button className="delay-30 w-10/12 hover:bg-[#3BC4AF] h-[70px] text-white rounded-sm">
-              <div className='flex flex-row place-items-center pl-11'><Icon icon="material-symbols-light:inventory"  className='h-[40px] w-[35px] mr-4' /><b>Customer</b></div>
+              <div className='flex flex-row place-items-center pl-11'><Icon icon="material-symbols-light:inventory"  className='h-[40px] w-[35px] mr-4' /><b>Transactions</b></div>
             </button>
           </NavLink>
         </div>

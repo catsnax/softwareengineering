@@ -3,6 +3,33 @@ import {Link, Route, Routes} from "react-router-dom";
 import { Icon } from '@iconify/react';
 import Sidebar from '../sidebar';
 
+const modalStyles = {
+  modalContainer: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    background: 'rgba(0, 0, 0, 0.6)', // Grey out the background
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 999,
+  },
+  modal: {
+    background: 'white',
+    border: '1px solid #ccc', // Add a border to the modal
+    borderRadius: '5px',
+    padding: '20px',
+    width: '500px',
+    height: '400px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+  },
+  modalContent: {
+    textAlign: 'left',
+  },
+};
+
 function Inventory(){
 
     const [Class, setClass] = useState([]);
@@ -11,6 +38,16 @@ function Inventory(){
     const [product, setProduct] = useState([]);
     const [sacks, setSacks] = useState(0);
     const [visibility, setVisibility] = useState([]);
+
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    const openModal = () => {
+      setModalOpen(true);
+    };
+  
+    const closeModal = () => {
+      setModalOpen(false);
+    };
 
     let sum = 0
     const resetArrayToZero = () => {
@@ -21,6 +58,7 @@ function Inventory(){
         setInputValues(newArray);
       };
 
+      
     const handleSubmit = (event) =>{
         let tester = window.confirm("Try to press")
         //create confirmation modal of sales order
@@ -106,7 +144,7 @@ function Inventory(){
       </div>
       <div className="flex flex-col w-10/12 shadow-lg mt-2">
         <div className="flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
-          <div className="flex-1">Sacks</div>
+
           <div className="flex-1">Class Type</div>
           <div className="flex-1">Measurement Type</div>
         
@@ -121,15 +159,14 @@ function Inventory(){
 {visibility.map((value, index) => {
 if(value == 1){
   return(
-    <div key={index} className="flex w-full ml-36 mt-5">
+    <div key={index} className="flex w-full justify-center items-center  mt-5">
       
      
-      {(index == 0) ? (<input value = {sacks} onChange = {handleInputSacks} class = "rounded-md text-center bg-[#3BC4AF] w-32"></input>) : <div class = "w-32"></div>}
-      <div className="flex-1 ml-12">{Class[index]}</div>
-      <div className="flex-1 ml-[-70px]">{measure[index]}</div>
+      <div className="flex-1 ">{Class[index]}</div>
+      <div className="flex-1">{measure[index]}</div>
     
       <div className='flex-1'><input
-                          class = "rounded-md text-center ml-[-70px] bg-[#3BC4AF] w-32"
+                          class = "rounded-md text-center bg-[#3BC4AF] w-32"
                           key={index}
                           type="text"
                           value={inputValues[index]}
@@ -139,14 +176,56 @@ if(value == 1){
     )
 }
 })}
+
+<button className="h-[30px] w-[200px] bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick={openModal}> + Register Sacks</button>
+    {isModalOpen && (
+                    <div style={modalStyles.modalContainer}>
+                      <div style={modalStyles.modal}>
+                        <div style={modalStyles.modalContent}>
+                          <div className="text-center text-xl font-bold mb-9">Add Sacks</div>
+                          <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
+                            <h2 className="flex-1 flex ml-10">
+
+                            </h2>
+                            <h2 className="flex-1 flex ml-10">
+                              <b>Number of Sacks </b>
+                              <div className="flex-1">
+                                <input
+                                  value={sacks}
+                                  onChange={(event) => setSacks(event.target.value)}
+                                  className="ml-[75px] rounded-lg bg-teal-500 h-6 w-[105px]"
+                                />
+                              </div>
+                            </h2>
+                            <div className='flex flex-col items-center gap-6'><button
+                              onClick={handleSubmit}
+                              className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end"
+                            >
+                              Submit
+                            </button>
+                            <button
+                              //onClick={closeModal}
+                              className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end"
+                            >
+                              Close
+                            </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
       </div>
 
-                <button onClick ={handleSubmit} class="delay-150 bg-white border-emerald-500 ml-[400px] border-2 place-content-center p-1 h-9 w-[160px] mt-[24px] rounded-lg">Add Inventory</button>
                 </form>
             </div>
-            
+
+  
 
         </div>
+        
+            
         </div>
     )
 };
