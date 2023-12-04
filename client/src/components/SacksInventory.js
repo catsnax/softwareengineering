@@ -166,7 +166,7 @@ const SacksInventory = () => {
             </div>
             <div className="flex flex-col w-10/12 shadow-lg mt-5">
               <div className="flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
-                <div className="flex-[0.3]"></div>
+
                 <div className="flex-1">Sack Date Input</div>
                 <div className="flex-1">Sack Quantity</div>
               </div>
@@ -175,18 +175,9 @@ const SacksInventory = () => {
               
               {sackQuantity.map((value, index) => {
                 return(
-                  <div className="flex flex-row w-full mt-5">
-                    <div className="">
-                    <Link to="/employee"><button className="ml-6 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
-                    <Icon icon="iconamoon:box-light" className='h-6 w-6'/>
-                    </button></Link>
-
-                    <button className="ml-6 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
-                        <Icon icon="material-symbols:delete-outline" className='h-6 w-6' />
-                    </button>
-                  </div>
-                  <div className="flex-1">{new Date(sackDate[index]).toLocaleDateString('en-US')}</div>
-                  <div className="flex-1">{sackQuantity[index]} sacks</div>
+                <div className="flex flex-row mr-8 items-center w-full mt-5">
+                    <div className="flex-1">{new Date(sackDate[index]).toLocaleDateString('en-US')}</div>
+                    <div className="flex-1">{sackQuantity[index]} sacks</div>
                 </div>
                 )
               })}

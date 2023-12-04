@@ -31,6 +31,11 @@ const modalStyles = {
   },
 };
 
+let options = {
+  hour: '2-digit',
+  minute: '2-digit'
+};
+
 function AdminSalesTransaction(){
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productName, setProductName] = useState('');
@@ -46,9 +51,12 @@ function AdminSalesTransaction(){
     
       const [firstNames, setFirstNames]  = useState([]);
       const [lastNames, setLastNames] = useState([]);   
+      const [id, setID] = useState([]);
 
       const [weight, setWeight] = useState();
       const[totalPrice, setTotalPrice] = useState();
+
+      const[selectedCustomer, setSelectedCustomer] = useState();
       
       let sum = 0
       let initialSum = 0;
@@ -75,7 +83,7 @@ function AdminSalesTransaction(){
   useEffect(() => {
     for(let i = 0; i < inputValues.length; i++){
       sum += productPrice[i] * inputValues[i]
-      console.log(sum);
+
     }
     setTotalPrice(sum)
   })
@@ -87,7 +95,9 @@ function AdminSalesTransaction(){
     .then(data => {
         setLastNames(data.map((row) => row.last_name));
         setFirstNames(data.map((row) => row.first_name));
-    })  
+        setID(data.map((row) => row.customer_id));
+        setSelectedCustomer(data[0].customer_id);
+      })  
   }, []);
 
 
@@ -102,6 +112,7 @@ function AdminSalesTransaction(){
       setRemainingQuantity(data[0].product.map((row) => row.total_quantity))
       //setInputValues(data[0].product.map((row) => row.class));  //proxy
       setVisibility(data[0].product.map((row)=> row.visibility));
+      
 
       const newArray = [...data[0].product.map((row) => row.price)];
       for(let i = 0; i < newArray.length; i++){
@@ -113,13 +124,6 @@ function AdminSalesTransaction(){
     })  
   }, []);
 
-  const resetArrayToZero = () => {
-    // Create a new array with all elements set to 0
-    const newArray = new Array(inputValues.length).fill('');
-
-    // Update the state with the new array
-    setInputValues(newArray);
-  };
 
   const handleInputChange = (index, newValue) => {
     const updatedValues = [...inputValues];
@@ -130,10 +134,34 @@ function AdminSalesTransaction(){
     }
   };
 
+  const handleCustomer = (value) => {
+      setSelectedCustomer(value)
+  }
+
+
+  let checker= false;
+  let zeroChecker = false;
+
   const handleSubmit = (event) =>{
-    let tester = window.confirm("Try to press")
-    //create confirmation modal of sales order
-    if(tester == true){
+    console.log(selectedCustomer);
+    for(let i = 0; i < inputValues.length; i++){
+      if(inputValues[i] > 0){
+        zeroChecker = true;
+      }
+      if(inputValues[i] > remainingQuantity[i]){
+        alert("quantity exceeds product quantity overflow season 1")
+        checker = true
+      }
+      else if(inputValues[i] < 0){
+        alert("quantity is below negative")
+        checker = true
+      }
+    }
+    if(zeroChecker == false){
+      alert("all values are zero")
+    }
+
+    if(checker == false && zeroChecker == false){
       event.preventDefault();
       console.log("submitted");
       const url = 'http://localhost:4000/sales';
@@ -146,12 +174,14 @@ function AdminSalesTransaction(){
           headers: {
           'Content-Type': 'application/json'
           },
-          body: JSON.stringify({quantity:inputValues, products:product, totalPrice:sum})
+          body: JSON.stringify({quantity:inputValues, products:product, totalPrice:totalPrice, customer:selectedCustomer})
       })
       .then(response => response.json())
       .catch(error => console.error(error))
       }
-  }
+    }
+    
+  
 
 
 
@@ -166,19 +196,17 @@ function AdminSalesTransaction(){
           <div className='flex flex-col w-8/12 shadow-lg'>
 
           
-          <div className = "flex w-[250px] gap-10 mt-8">
-            <div className = ""> Pick Customer </div>
-            <select className='h-[30px] mr-[720px] w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] justify-start border-black hover:bg-[#F3F3F3]'>
-          
-          {firstNames.map((value, index) => {
-
-            return(
-              <option className = "w-48"> {lastNames[index]}, {firstNames[index]}</option>
-            )
-          })}
-
-          
-          </select>
+          <div className = "flex ml-[480px] w-[45px] justify-center">
+            <div className="flex justify-start">
+              <div className="w-[130px] pt-[3px]"> Pick Customer </div>
+            </div>
+            <select value = {selectedCustomer} onChange = {(event) => {handleCustomer(event.target.value)}}  className='h-[30px] mr-[720px] w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] justify-start border-black hover:bg-[#F3F3F3]'>
+              {firstNames.map((value, index) => {
+                return(
+                  <option value = {id[index]} className = "w-48"> {lastNames[index]}, {firstNames[index]} </option>
+                )
+              })}
+            </select>
           </div>
 
             
@@ -205,9 +233,9 @@ function AdminSalesTransaction(){
                           class = "rounded-md text-center bg-[#3BC4AF] w-32"
                           key={index}
                           type="text"
-                          value={inputValues[index]}
-                          onChange={(e) => handleInputChange(index, e.target.value)}
-                              /></div>
+                          value={inputValues[index] }
+                          onChange={(e) => handleInputChange(index, e.target.value)}  
+                              />  {(inputValues[index] > remainingQuantity[index] || inputValues[index] < 0) ? <span className = "mr-[-20px]"> 🔴 </span>: <span></span>}</div>
                       
                       </div>
                     )

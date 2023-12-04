@@ -114,8 +114,9 @@ const handleSearch = (event) => {
         <div className="font-bold text-2xl mt-5">Sales Report</div>
         <div className="flex flex-col w-10/12 mt-5">
           <div className="flex justify-end">
-            <div className="h-[30px] mr-2 mt-1"> Date</div>
+            <div className="h-[30px] mr-2 mt-1"> From</div>
             <input type = "date" onChange = {(event) => {setDate(event.target.value)}} className="h-[30px] mr-1 w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" />
+            <div className="h-[30px] mr-2 mt-1"> To</div>
             <input type = "date" onChange = {(event) => {setDate(event.target.value)}} className="h-[30px] mr-1 w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" />
 
            <button onClick = {handleSearch} 

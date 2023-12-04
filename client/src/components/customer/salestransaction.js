@@ -124,31 +124,51 @@ function SalesTransaction(){
     setInputValues(newArray);
   };
 
-  
+  let checker= false;
+  let zeroChecker = false;
+
 
   const handleSubmit = (event) =>{
-    let tester = window.confirm("Try to press")
-    //create confirmation modal of sales order
-    if(tester == true){
-      event.preventDefault();
-      for(let i = 0; i < inputValues.length; i++){
-        initialSum = inputValues[i] * productPrice[i]
-        sum += initialSum;
+    for(let i = 0; i < inputValues.length; i++){
+      if(inputValues[i] > 0){
+        zeroChecker = true;
       }
-      console.log(sum)
-      console.log("submitted");
-      const url = 'http://localhost:4000/sales';
-      fetch(url, {
-          method: 'POST',
-          headers: {
-          'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({quantity:inputValues, products:product, totalPrice:sum, user:user})
-      })
-      .then(response => {response.json()})
-      .catch(error => console.error(error))
+      if (inputValues[i] > remainingQuantity[i]){
+        alert("quantity exceeds product quantity overflow season 1")
+        checker = true
       }
-      openModal();
+      else if(inputValues[i] < 0){
+        alert("quantity is below negative")
+        checker = true
+      }
+    }
+    if(zeroChecker == false){
+      alert("all values are zero")
+    }
+
+    if(checker == false && zeroChecker == false){
+      let tester = window.confirm("Try to press")
+      if(tester == true){
+        event.preventDefault();
+        for(let i = 0; i < inputValues.length; i++){
+          initialSum = inputValues[i] * productPrice[i]
+          sum += initialSum;
+        }
+        console.log(sum)
+        console.log("submitted");
+        const url = 'http://localhost:4000/sales';
+        fetch(url, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({quantity:inputValues, products:product, totalPrice:sum, customer:user})
+        })
+        .then(response => {response.json()})
+        .catch(error => console.error(error))
+        }
+        openModal();
+    }
   }
 
 
@@ -189,7 +209,7 @@ function SalesTransaction(){
                           type="text"
                           value={inputValues[index]}
                           onChange={(e) => handleInputChange(index, e.target.value)}
-                              /></div>
+                              /> {(inputValues[index] > remainingQuantity[index] || inputValues[index] < 0) ? <span className = "mr-[-20px]"> 🔴 </span>: <span></span>} </div>
                         
                       
                       </div>

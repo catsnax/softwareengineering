@@ -148,11 +148,9 @@ app.get('/sales' , (req, res) => {
 app.post('/sales', (req, res) => {
     console.log(req.body);
     let orderQuery = `INSERT INTO orders(order_date, total_amount, order_status, customer_id) VALUES (?, ?, ?, ?)`;
-    let orderValues = [new Date(), req.body.totalPrice, "Pending Approval", req.body.user];
+    let orderValues = [new Date(), req.body.totalPrice, "Pending Approval", req.body.customer];
     connection.execute(orderQuery, orderValues);
 
-    
-    
     let query = 'SELECT MAX(order_id) FROM orders;'
     connection.query(query, (err,results) => {
         if(err){

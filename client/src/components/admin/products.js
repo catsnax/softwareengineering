@@ -40,19 +40,28 @@ function Products() {
   const [price, setPrice] = useState([]);
 
   const [inputValues, setInputValues] = useState([]);
+  const [newInputValues, setNewInputValues] = useState([]);
 
   const [newName, setNewName] = useState('');
   const [newPrice, setNewPrice] = useState('');
   const [newMeasurement, setNewMeasurement] = useState('');
 
 
-    const [product, setProduct] = useState([]);
-    const [type, setType] = useState([]);
-    const [measure, setMeasure] = useState([])
-    const [id, setID] = useState([]);
-    const [visibility, setVisibility] = useState([]);
+  const [product, setProduct] = useState([]);
+  const [type, setType] = useState([]);
+  const [measure, setMeasure] = useState([])
+  const [id, setID] = useState([]);
+  const [visibility, setVisibility] = useState([]);
 
-    const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState('');
+
+  const [inputChecker, setInputChecker] = useState(false);
+
+  const handleInputChange = (index, newValue) => {
+    const updatedValues = [...newInputValues];
+    updatedValues[index] = newValue;
+    setNewInputValues(updatedValues);
+  };
 
   const handleRadioChange = (event) => {
     setSelectedValue(event.target.value);
@@ -69,6 +78,8 @@ function Products() {
             setMeasure(data.map((row) => row.measurement_type))
             setID(data.map((row) => row.product_id));
             setVisibility(data.map((row)=> row.visibility))
+
+            setNewInputValues(data.map((row) => row.price));
             
             console.log(data);
 
@@ -148,6 +159,11 @@ function Products() {
     }, 2000);
   };
 
+  const handleEditPrice = () => {
+    (inputChecker == true) ? setInputChecker(false): setInputChecker(true)
+    console.log(inputChecker);
+  }
+
   return (
     <div className="w-screen min-h-screen flex">
       <Sidebar />
@@ -174,8 +190,11 @@ function Products() {
                 Repack Page
               </button>
             </Link>
-            <button className="h-[30px] w-[200px] bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick={openCreateModal}>
+            <button className="h-[30px] w-[130px] bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick={openCreateModal}>
               + Add Product
+            </button>
+            <button className="h-[30px] w-[130px] bg-[#D9D9D9] rounded-tr-sm ml-2 rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick= {handleEditPrice} >
+              Edit Price
             </button>
           </div>
         </div>
@@ -196,37 +215,25 @@ function Products() {
               return(
               <div key={index} className="flex flex-row w-full mt-5">
               <div className="">
-                <button
-                  className="ml-6 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white"
-                  onClick={() => openModal('Batch0121312', 'Class A')}
-                >
-                  <Icon icon="bxs:edit" className="h-6 w-6" />
-                </button>
-
+              
                 <button onClick = {() => handleDelete(index)} className="ml-6 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
                   <Icon icon="material-symbols:delete-outline" className='h-6 w-6'/> </button>
 
             </div>
             
-              <div className="flex-1">{type[index]}</div>
-              <div className="flex-1">{quantity[index]}</div>
-              <div className="flex-1">{measure[index]}</div>
-              <div className="flex-1">{price[index]}/{measure[index]}</div>
+              <div className="flex-1 ml-14">{type[index]}</div>
+              <div className="flex-1 ml-4 mr-4">{quantity[index]}</div>
+              <div className="flex-1 mr-12">{measure[index]}</div>
+              {(inputChecker == true) ?  <div class = "flex mr-[40px] ml-10"><input value= {newInputValues[index]} onChange={(e) => handleInputChange(index, e.target.value)} class = "h-8 rounded-md text-center bg-[#3BC4AF] w-32 mr-1"></input> <span>/{measure[index]}</span></div>  : <span className="flex-1">{price[index]}/{measure[index]}</span>}
             </div>
-            )}}
-            
-            }
-            
-             
-            
-            )}
-          
-            
-
-
+            )}}            
+          } 
+        )}
         </div>
-        </div>
+        {(inputChecker == true) ? <button className = "bottom-0 w-full text-xl p-4 delay-30 w-10/12 bg-[#3BC4AF] h-[60px] text-white rounded-sm"> Save Changes</button> : <span></span>}
+
       </div>
+    </div>
 
       {/* Modal */}
       {isModalOpen && (

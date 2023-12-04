@@ -33,6 +33,10 @@ const modalStyles = {
   },
 };
 
+let options = {
+  hour: '2-digit',
+  minute: '2-digit'
+};
 
 function CustomerProfile() {
 
@@ -144,7 +148,6 @@ function CustomerProfile() {
           <div className="flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
             <div className="flex-[0.1]"></div>
             <div className="flex-1">Date Ordered</div>
-            <div className="flex-1">Quantity</div>
             <div className="flex-1">Total</div>
             <div className = "flex-1">Status</div>
           </div>
@@ -158,8 +161,7 @@ function CustomerProfile() {
                   <Icon icon="bxs:edit" className="h-5 w-5" />
                 </button></Link>
               </div>
-              <div className="flex-1">{new Date(date[index]).toLocaleDateString('en-US')}</div>
-              <div className="flex-1">50 boxes</div>
+              <div className="flex-1">{new Date(date[index]).toLocaleDateString('en-US', options)}</div>
               <div className="flex-1">P{totalAmount[index]}</div>
               <div className="flex-1">{status[index]}</div>
             </div>
