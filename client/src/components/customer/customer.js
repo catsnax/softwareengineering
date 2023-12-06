@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import CustomerSidebar from '../sidebarcust';
 import { Icon } from '@iconify/react';
+import ImageUploadForm from '../ImageUploadForm';
 
 
 const modalStyles = {
@@ -241,7 +242,7 @@ function Customer() {
 <div>-----------------------------------------------------------------------------</div>
 <h2 className="text-center text-xl font-bold mb-2">PROOF OF PAYMENT </h2>
 {(orderReceipt != null) ? 
-(<div className = "self-center mt-[-20px]" ><img  width = "350" height = "100" src = {require(`${orderReceipt}`)} alt = "myimage1"></img></div>): <span className = "text-center"> No Receipt Found</span>}
+(<div className = "self-center mt-[-20px]" ><img  width = "350" height = "100" src = {require(`${orderReceipt}`)} alt = "myimage1"></img></div>): <div className  = "text-center"><span className = "text-center"> No Receipt Found</span> <ImageUploadForm></ImageUploadForm>  </div>}
                 
                 
                 {/* Add more input fields for editing */}

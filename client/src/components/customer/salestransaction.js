@@ -68,7 +68,6 @@ function SalesTransaction(){
   useEffect(() => {
     for(let i = 0; i < inputValues.length; i++){
       sum += productPrice[i] * inputValues[i]
-      console.log(sum);
     }
     setTotalPrice(sum)
   })
@@ -79,7 +78,6 @@ function SalesTransaction(){
     setInputValues(updatedValues);
     for(let i = 0; i < productPrice.length; i++){
       sum += productPrice[i] * inputValues[i]
-      console.log(sum)
     }
 };
 
@@ -146,7 +144,10 @@ function SalesTransaction(){
       alert("all values are zero")
     }
 
-    if(checker == false && zeroChecker == false){
+    console.log(checker)
+    console.log(zeroChecker)
+
+    if(checker == false && zeroChecker == true){
       let tester = window.confirm("Try to press")
       if(tester == true){
         event.preventDefault();
@@ -154,7 +155,6 @@ function SalesTransaction(){
           initialSum = inputValues[i] * productPrice[i]
           sum += initialSum;
         }
-        console.log(sum)
         console.log("submitted");
         const url = 'http://localhost:4000/sales';
         fetch(url, {

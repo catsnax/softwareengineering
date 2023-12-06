@@ -146,7 +146,6 @@ app.get('/sales' , (req, res) => {
 })
 
 app.post('/sales', (req, res) => {
-    console.log(req.body);
     let orderQuery = `INSERT INTO orders(order_date, total_amount, order_status, customer_id) VALUES (?, ?, ?, ?)`;
     let orderValues = [new Date(), req.body.totalPrice, "Pending Approval", req.body.customer];
     connection.execute(orderQuery, orderValues);
@@ -562,7 +561,7 @@ app.post('/changeprice', (req, res) => {
 
 })
 
-app.get('/payroll', (req, res) => {
+app.get('/employeepayroll', (req, res) => {
     const query = `SELECT * FROM employees`;
     connection.query(query, (err, results) => {
         res.json(results);
@@ -571,8 +570,35 @@ app.get('/payroll', (req, res) => {
 })
 
 app.post('/payroll', (req, res) => {
-    console.log(req.body);
+    let body = req.body;
+    console.log(body);
+    let payrollQuery = `INSERT INTO payroll(user_id, report_date) VALUES (?, ?)`
+    values = [req.body.adminID, new Date()];
+    connection.execute(payrollQuery, values);
+    
 
+    let maxQuery = `SELECT MAX(payroll_id) FROM payroll`
+    connection.query(maxQuery, (err, results) => {
+        for(let i = 0; i < req.body.selectedEmployee.length; i++){
+            insertQuery = `INSERT INTO payslip(hourly_rate, hours_worked, time_in, time_out, employee_pay, employee_id, payroll_id ) VALUES (${body.hourlyRates[i]} , ${body.hoursDifference[i]}, '${body.timeIn[i]}', '${body.timeOut[i]}', ${body.totalPay[i]}, ${body.selectedEmployee[i]}, ${results[0][`MAX(payroll_id)`]})`
+            connection.execute(insertQuery);
+        }
+    })
+})
+
+app.get('/payroll', (req, res) => {
+    let query = `SELECT payroll.report_date, payroll.payroll_id, employees.last_name, employees.first_name from payroll INNER JOIN employees ON payroll.user_id = employees.user_id`;
+    connection.query(query, (err, results) => {
+        res.send(results);
+
+    })
+})
+
+app.post('/payrolldetails', (req, res) => {
+    const query =  `SELECT payslip.hourly_rate, payslip.hours_worked, payslip.time_in, payslip.time_out, payslip.employee_pay, employees.last_name, employees.first_name FROM payslip INNER JOIN employees ON payslip.employee_id = employees.employee_id WHERE payslip.payroll_id  = ${req.body.payrollID}`
+    connection.query(query, (err, results) => {
+        res.send(results);
+    })
 })
 
 

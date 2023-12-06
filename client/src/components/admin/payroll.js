@@ -22,13 +22,18 @@ const modalStyles = {
       border: '1px solid #ccc', // Add a border to the modal
       borderRadius: '5px',
       padding: '20px',
-      width: '600px',
+      width: '700px',
       height: '550px',
       boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     },
     modalContent: {
       textAlign: 'left',
     },
+  };
+
+  let options = {
+    hour: '2-digit',
+    minute: '2-digit'
   };
 
 const Payroll = () => {
@@ -40,48 +45,139 @@ const openModal = () => {
   };
   const closeModal = () => {
     setIsModalOpen(false);
+    setNames([]);
+    setCondition(false);
+    setHoursDifference([]);
   };
 
+const [anotherModal, setAnotherModal] = useState(false);
+const openAnotherModal = (payroll_id, today) => {
+  setAnotherModal(true);
+  const url = 'http://localhost:4000/payrolldetails'
+  
+    fetch(url, {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({payrollID: payroll_id})
+  })
+  .then(response => response.json())
+  .then((data)=> {
+    setEmployeeLastName(data.map((row) => row.last_name));
+    setEmployeeFirstName(data.map((row) => row.first_name));
+    setHourlyRate((data.map((row) => row.hourly_date)));
+    setHoursWorked(data.map((row)=> row.hours_worked))
+    setEmpTimeIn(data.map((row) => row.time_in));
+    setEmpTimeOut(data.map((row) => row.time_out));
+    setTotalEmpPayment(data.map((row) => row.employee_pay))
+    setCurrentDate(new Date(payrollDate[today]));
+  })
+  .catch(error => console.error(error))
+  }
 
 
-//displaying employee variables
+const closeAnotherModal = () => {
+  setAnotherModal(false);
+}
+
+
+//for first modal select options
 const [lastName, setLastName] = useState([]);
 const [firstName, setFirstName] = useState([]);
-const [department, setDepartment] = useState([]);
-const [position, setPosition] = useState([]);
 const [employeeID, setEmployeeID] = useState([]);
-
+//regulating selected employee & associated salary
 const [selectedEmployee, setSelectedEmployee] = useState([])
-const [selectedPayment, setSelectedPayment] = useState([]);
+const [selectedPay, setSelectedPay] = useState([]);
+const [checkerEmployee, setCheckerEmployee] = useState([]);
 
+//data coming from first modal file
 const [hoursDifference, setHoursDifference] = useState([]);
 const [names, setNames] = useState([]);
-
 const [payRates, setPayRates] = useState([]);
+const [condition, setCondition] = useState(false);
+const[timeIn, setTimeIn] = useState([]);
+const[timeOut, setTimeOut] = useState([]);
+const [totalPay, setTotalPay] = useState([]);
+const [payrollDate, setPayrollDate] = useState([]);
+
+//other data
+const [adminLast, setAdminLast]  = useState([]);
+const [adminFirst, setAdminFirst]  = useState([]);
+const [payrollID, setPayrollID] = useState([]);
+
+//data for payslip details
+const [employeeLastName, setEmployeeLastName] = useState([]);
+const [employeeFirstName, setEmployeeFirstName] = useState([]);
+const [hourlyRate, setHourlyRate] = useState([]);
+const [hoursWorked, setHoursWorked] = useState([]);
+const [totalEmpPayment, setTotalEmpPayment] = useState([]);
+const [empTimeIn, setEmpTimeIn] = useState([]);
+const [empTimeOut, setEmpTimeOut] = useState([]);
+const [currentDate, setCurrentDate] = useState([]);
+
 
 const receiveVariable = (variable1, variable2) => {
   setNames(variable1.map((row) => row.Name))
+  setTimeIn(variable1.map((row) => row['Clock In']));
+  setTimeOut(variable1.map((row) => row['Clock Out']));
   setHoursDifference(variable2);
+  setCondition(true);
+
+  setSelectedEmployee(variable2.map((row) => 0))
+  
+  let dummyArray = []
+
+  for(let i = 0; i < variable2.length; i++){
+      dummyArray[i] = variable2[i] * selectedPay[i];
+      setTotalPay(dummyArray)
+  }
 }
 
 const handleInputChange = (index, newValue) => {
   const updatedValues = [...selectedEmployee];
-  updatedValues[index] = newValue
+  const newUpdated = [...selectedPay]
+  const payUpdated = [...totalPay]
+  let checkerValues = [...checkerEmployee]
+
+  checkerValues[index] = newValue
+  updatedValues[index] = employeeID[newValue]
+  newUpdated[index] = payRates[newValue]
+  payUpdated[index] = payRates[newValue] * hoursDifference[index]
+
+  console.log(updatedValues);
+
+  setCheckerEmployee(checkerValues);
   setSelectedEmployee(updatedValues);
+  setSelectedPay(newUpdated);
+  setTotalPay(payUpdated);
   };
 
 
 useEffect(() => {
-    fetch('http://localhost:4000/payroll')
+    fetch('http://localhost:4000/employeepayroll')
     .then(res => {return res.json()})
     .then(data => {
-      console.log(data);
+      data.reverse();
       setLastName(data.map((row) => row.last_name));
       setFirstName(data.map((row) => row.first_name))
       setEmployeeID(data.map((row) => row.employee_id))
-      setSelectedEmployee(data.map((row) => row.employee_id));
-      setPayRates(data.map((row) => row.active_salary));
       
+      setPayRates(data.map((row) => row.active_salary));
+      setSelectedPay(data.map((row) => row.active_salary));
+}
+)}, [])
+
+useEffect(() => {
+  fetch('http://localhost:4000/payroll')
+  .then(res => {return res.json()})
+  .then(data => {
+    data.reverse();
+    setPayrollDate(data.map((row) => row.report_date));
+    setAdminLast(data.map((row) => row.last_name));
+    setAdminFirst(data.map((row) => row.first_name));
+    setPayrollID(data.map((row) => row.payroll_id))
+
 }
 )}, [])
 
@@ -98,7 +194,7 @@ const handleCreate = (event) => {
               headers: {
               'Content-Type': 'application/json'
               },
-              body: JSON.stringify({})
+              body: JSON.stringify({selectedEmployee:selectedEmployee, hourlyRates:selectedPay, hoursDifference: hoursDifference, timeIn:timeIn, timeOut:timeOut, totalPay:totalPay, adminID: localStorage.getItem("adminID")})
           })
           .then(response => response.json())
           .catch(error => console.error(error))
@@ -136,34 +232,32 @@ const handleCreate = (event) => {
         <div className="flex flex-col w-10/12 shadow-lg mt-5">
           <div className="flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
             <div className="flex-[0.2]"></div>
-            <div className="flex-1">Name</div>
-            <div className="flex-1">Department</div>
-            <div className="flex-1">Position</div>
+            <div className="flex-1">Date</div>
+            <div className="flex-1">Admin</div>
           </div>
 
           <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
           
 
-          {/*}{lastName.map((value, index) => {
+          {payrollDate.map((value, index) => {
             return(
             <div className="flex flex-row w-full mt-5">
                 <div className="">
-                <Link to="/employee"><button className=" rounded-sm ml-4 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
+                <button onClick = {() => openAnotherModal(payrollID[index], index)} className=" rounded-sm ml-4 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
                 <Icon icon="ph:play" className='h-6 w-6'/>
-                </button></Link>
+                </button>
                 </div>
-              <div className="flex-1">{lastName[index]}, {firstName[index]}</div>
-              <div className="flex-1">{department[index]}</div>
-              <div className="flex-1">{position[index]}</div>
+              <div className="flex-1 ml-10">{new Date(payrollDate[index]).toLocaleDateString('en-US', options)}</div>
+              <div className="flex-1">{adminLast[index]}, {adminFirst[index]}</div>
+              
             </div>
 
             )
 
             
-          })}*/}
+          })}
           </div>
-          {/* Additional employee entries can be added as needed */}
-        </div>
+\        </div>
          {/* Modal */}
          {isModalOpen && (
                     <div style={modalStyles.modalContainer}>
@@ -174,7 +268,8 @@ const handleCreate = (event) => {
                         
                               
                           <ExcelReader onDataLoaded = {receiveVariable}></ExcelReader>
-                          <table class=" min-w-full table-auto">
+                          {(condition == true) ? <div>
+                          <table class=" min-w-full table-auto mt-[-20px]">
                               <thead>
                                 <tr className = "text-center">
                                   <th>Name</th>
@@ -188,25 +283,72 @@ const handleCreate = (event) => {
                                   <tr key={index}>
                                     <td>{names[index]}</td>
                                     <td>{hoursDifference[index]} hours</td>
-                                    <select value = {selectedEmployee[index]} onChange={(e) => handleInputChange(index, e.target.value)}>
+                                    <select value = {checkerEmployee[index]} onChange={(e) => handleInputChange(index, e.target.value)}>
                                     {lastName.map((value, index) => {
                                       return(
-                                        <option value = {employeeID[index]}> {lastName[index]}, {firstName[index]}</option>
+                                        <option value = {index}> {lastName[index]}, {firstName[index]}</option>
                                       )
 
                                     })}
                                     </select>
-                                    <td>P{payRates[index]}</td>
+                                    <td>P{selectedPay[index] * hoursDifference[index]}</td>
                                   </tr>
                                 ))}
                               </tbody>
                             </table> 
+                            
 
 
-                            <div className='flex flex-col items-center gap-6 mt-[0px]'>
-                              <button onClick = {handleCreate}> Submit </button>
+                            <div className='flex justify-center items-center gap-2 mt-[40px]'>
                               <button onClick={closeModal} className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end">Close </button>
+                              <button className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end" onClick = {handleCreate}> Submit </button>
                             </div>
+                            </div> : <span> <button onClick={closeModal} className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end">Close </button></span>}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+          {anotherModal&& (
+                    <div style={modalStyles.modalContainer}>
+                      <div style={modalStyles.modal}>
+                        <div style={modalStyles.modalContent}>
+                          <div className="text-center text-xl font-bold mb-9">{currentDate.toLocaleString('en-US')}</div>
+                          <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
+                        
+                          <table class=" min-w-full table-auto mt-[-20px]">
+                              <thead>
+                                <tr className = "text-center">
+                                  <th>Name</th>
+                                  <th> Time In</th>
+                                  <th> Time Out</th>
+                                  <th>Hours Worked</th>
+                                  <th>Total Payment</th>
+                                </tr>
+                              </thead>
+                              <tbody className = "text-center">
+                                {employeeFirstName.map((value, index) =>  {
+                                  return(
+                                    <tr key={index}>
+                                      <td>{employeeLastName[index]}, {employeeFirstName[index]}</td>
+                                      <td>{empTimeIn[index]}</td>
+                                      <td> {empTimeOut[index]}</td>
+                                      <td> {hoursWorked[index]}</td>
+                                      <td> {totalEmpPayment[index]}</td> 
+                                    </tr>
+
+                                  )
+
+                                })}
+                                  
+                              </tbody>
+                            </table> 
+                            
+                            <div className='flex justify-center items-center gap-2 mt-[40px]'>
+                              <button onClick={closeAnotherModal} className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end">Close </button>
+                            </div>
+                            
                           </div>
                         </div>
                       </div>

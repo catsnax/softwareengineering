@@ -3,6 +3,8 @@ import { BrowserRouter } from 'react-router-dom';
 import {Link, Route, Routes} from "react-router-dom";
 import Sidebar from '../sidebar';
 import { Icon } from '@iconify/react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const modalStyles = {
   modalContainer: {
@@ -36,6 +38,8 @@ let options = {
   minute: '2-digit'
 };
 
+
+
 function AdminSalesTransaction(){
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productName, setProductName] = useState('');
@@ -57,6 +61,8 @@ function AdminSalesTransaction(){
       const[totalPrice, setTotalPrice] = useState();
 
       const[selectedCustomer, setSelectedCustomer] = useState();
+
+      const[isReady, setIsReady] = useState(false);
       
       
       let sum = 0
@@ -70,7 +76,7 @@ function AdminSalesTransaction(){
     setIsModalOpen(false);
   };
 
-
+ 
   const handleAddProduct = () => {
     // Handle the logic for adding product here
     console.log('Adding product:', productName);
@@ -88,6 +94,11 @@ function AdminSalesTransaction(){
     }
     setTotalPrice(sum)
   })
+
+  
+    
+  
+
 
   //get customer list
   useEffect(() => {
@@ -107,6 +118,23 @@ function AdminSalesTransaction(){
     .then(res => {return res.json()})
     .then(data => {
       console.log(data[0].product);
+      
+      let dummyQuantity = data[0].product.map((row) => row.total_quantity);
+      let dummyClass = data[0].product.map((row) => row.class)
+      let dummyMeasure = data[0].product.map((row) => row.measurement_type)
+
+      for(let i = 0 ; i < dummyQuantity.length; i++){
+        if(dummyQuantity[i] < 50){
+          toast.success( `Class ${dummyClass[i]} has less than 50 ${dummyMeasure[i]}`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 10000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          className: 'text-sm p-2',
+        })}
+      }
       setProduct(data[0].product)
       setClass(data[0].product.map((row) => row.class));
       setMeasure(data[0].product.map((row) => row.measurement_type)); //measurement types
@@ -114,7 +142,6 @@ function AdminSalesTransaction(){
       //setInputValues(data[0].product.map((row) => row.class));  //proxy
       setVisibility(data[0].product.map((row)=> row.visibility));
       
-
       const newArray = [...data[0].product.map((row) => row.price)];
       for(let i = 0; i < newArray.length; i++){
         newArray[i] = 0
@@ -122,6 +149,7 @@ function AdminSalesTransaction(){
       setInputValues(newArray);
       setProductPrice(data[0].product.map((row) => row.price));
 
+      setIsReady(true);
     })  
   }, []);
 
@@ -186,11 +214,11 @@ function AdminSalesTransaction(){
 
 
 
-    return (
+    return isReady ?(
         <div className=" w-screen min-h-screen flex">
         <Sidebar></Sidebar>
         <div className=' w-screen min-h-screen flex flex-col ml-[500px] mt-[125px] items-start'>
-          
+          <ToastContainer/>
           <div className='font-bold text-2xl mt-2'>Sales Transaction</div>
           
           
@@ -303,6 +331,6 @@ function AdminSalesTransaction(){
       </div>
 
 
-    )
+    ) : <span></span>
 };
 export default AdminSalesTransaction;
