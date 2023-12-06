@@ -521,11 +521,21 @@ app.post('/repackdetails', (req, res) => {
 
 app.post('/salesreport', (req, res) => {
     console.log(req.body);
-    dateQuery = `SELECT order_id, order_date, total_amount, order_status, orders.customer_id, last_name, first_name FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id WHERE (DATE(order_date) = '${req.body.date}') AND (order_status = 'Delivered' OR order_status = 'Shipped')`
-    connection.query(dateQuery, (err, result) => {
+    if(req.body.changeOption == true) {
+        dateQuery = `SELECT order_id, order_date, total_amount, order_status, orders.customer_id, last_name, first_name FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id WHERE (DATE(order_date) = '${req.body.date}') AND (order_status = 'Delivered' OR order_status = 'Shipped')`
+        connection.query(dateQuery, (err, result) => {
         console.log(result);
         res.send(result);
-    })
+        })
+    }
+    else if(req.body.changeOption == false){
+        dateQuery = `SELECT order_id, order_date, total_amount, order_status, orders.customer_id, last_name, first_name FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id WHERE (DATE(order_date) BETWEEN  '${req.body.fromDate}' AND '${req.body.toDate}') AND (order_status = 'Delivered' OR order_status = 'Shipped' OR order_status = 'Unpaid')`
+        connection.query(dateQuery, (err, result) => {
+        console.log(result);
+        res.send(result);
+        })
+    }
+    
 })
 
 app.get('/salescustomer', (req, res) => {

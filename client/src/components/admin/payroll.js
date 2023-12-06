@@ -104,14 +104,11 @@ const handleCreate = (event) => {
         <div className="flex flex-col w-10/12 mt-5">
           <div className="flex justify-end">
           <Link to="/payroll">
-            <button className="h-[30px] w-[200px] mr-1 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]">
-             Payroll
+            <button className="h-[30px] w-[120px] mr-1 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick = {openModal}>
+             Add Payslip
             </button>
           </Link>
-            <button className="h-[30px] w-[150px] mr-2 bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick = {openModal}>
-            Register Employee
-            </button>
-            <ExcelReader onDataLoaded = {receiveVariable}></ExcelReader>
+            
           </div>
         </div>
         <div className="flex flex-col w-10/12 shadow-lg mt-5">
@@ -150,11 +147,11 @@ const handleCreate = (event) => {
                     <div style={modalStyles.modalContainer}>
                       <div style={modalStyles.modal}>
                         <div style={modalStyles.modalContent}>
-                          <div className="text-center text-xl font-bold mb-9">Register Employee</div>
+                          <div className="text-center text-xl font-bold mb-9">Add Payslip</div>
                           <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
                         
                               
-                           
+                          <ExcelReader onDataLoaded = {receiveVariable}></ExcelReader>
                             
                             <div className='flex flex-col items-center gap-6 mt-[0px]'>
                               <button onClick = {handleCreate}> Submit </button>

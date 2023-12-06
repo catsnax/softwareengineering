@@ -40,6 +40,9 @@ const SalesReport = () => {
 //create sales report variables
 const [date, setDate] = useState();
 
+const [fromDate, setFromDate] = useState();
+const [toDate, setToDate] = useState();
+
 const [orderDates, setOrderDates] = useState([]);
 const [lastNames, setLastNames] = useState([]);
 const [firstNames, setFirstNames] = useState([]);
@@ -48,6 +51,17 @@ const [orderStatus, setOrderStatus] = useState([]);
 const [totalCost, setTotalCost] = useState(0);
 
 let sum = 0;
+
+const [changeOption, setChangeOption] = useState(false);
+
+const handleChange = () => {
+  if (changeOption == true){
+    setChangeOption(false)
+  }
+  else{
+    setChangeOption(true);
+  }
+} 
 
 
 const handleSearch = (event) => {
@@ -62,7 +76,7 @@ const handleSearch = (event) => {
               headers: {
               'Content-Type': 'application/json'
               },
-              body: JSON.stringify({date: date})
+              body: JSON.stringify({date: date, changeOption: changeOption, fromDate: fromDate, toDate: toDate })
           })
           .then(response => response.json())
           .then((data) => {
@@ -114,11 +128,18 @@ const handleSearch = (event) => {
         <div className="font-bold text-2xl mt-5">Sales Report</div>
         <div className="flex flex-col w-10/12 mt-5">
           <div className="flex justify-end">
-            <div className="h-[30px] mr-2 mt-1"> From</div>
-            <input type = "date" onChange = {(event) => {setDate(event.target.value)}} className="h-[30px] mr-1 w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" />
-            <div className="h-[30px] mr-2 mt-1"> To</div>
-            <input type = "date" onChange = {(event) => {setDate(event.target.value)}} className="h-[30px] mr-1 w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" />
-
+            <button onClick = {handleChange} className="h-[30px] w-[150px] mr-2 bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]"> Change Searching</button>
+            {(changeOption == false) ? 
+            <div className = "flex">
+                <div className="h-[30px] mr-2 mt-1"> From</div>
+                <input type = "date" onChange = {(event) => {setFromDate(event.target.value)}} className="h-[30px] mr-1 w-[100x] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" />
+                <div className="h-[30px] mr-2 mt-1"> To</div>
+                <input type = "date" onChange = {(event) => {setToDate(event.target.value)}} className="h-[30px] mr-1 w-[140px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" />
+            </div> : 
+            <div className = "flex">
+              <div className="h-[30px] mr-2 mt-1"> Select Date</div>
+              <input type = "date" onChange = {(event) => {setDate(event.target.value)}} className="h-[30px] mr-1 w-[80x] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" />
+            </div>}
            <button onClick = {handleSearch} 
            className="h-[30px] w-[120px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]"> Search</button>
            
