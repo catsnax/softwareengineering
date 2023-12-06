@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from '../images/shebalogo_nobg.png';
 import { Icon } from '@iconify/react';
 
 function Sidebar() {
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const[position, setPosition] = useState('')
 
   const handleLogout = ( (parameter) =>{
     let tester = window.confirm("Are you sure you want to logout?")
@@ -12,6 +16,24 @@ function Sidebar() {
         window.location.replace('/');
 }}
 )
+  useEffect(() => {
+    const url = 'http://localhost:4000/sidebaremp';
+      fetch(url, {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({id:localStorage.getItem('adminID')})
+      })
+      .then(response => response.json())
+      .then((data) => {
+        setFirstName(data[0].first_name);
+        setLastName(data[0].last_name);
+        setPosition(data[0].position)
+      })
+      .catch(error => console.error(error))
+      
+  }, [])
 
 
   const activeLinkStyle = {
@@ -28,8 +50,8 @@ function Sidebar() {
         />
       </div>
       <div className="rounded-full border-2 bg-white h-40 w-40 min-h-40 mb-8 mt-10 border-white"></div>
-      <div className="text-xl font-bold text-white">Aaron Macias</div>
-      <div className="text-lg text-white">Marketing Head</div>
+      <div className="text-xl font-bold text-white">{firstName} {lastName}</div>
+      <div className="text-lg text-white">{position}</div>
       <div className="mt-[20px]  rounded-lg w-11/12 bg-white h-[2px]"></div>
 
       <div className='w-full mt-10'>

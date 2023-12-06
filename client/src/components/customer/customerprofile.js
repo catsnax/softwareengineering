@@ -58,6 +58,7 @@ function CustomerProfile() {
     const [totalAmount, setTotal] = useState([]);
     const [status, setStatus] = useState([]);
     const [orderID, setOrderID] = useState([]);
+    const [verified, setVerified] = useState('Unverified');
 
     useEffect(() => {
         const url = 'http://localhost:4000/customer';
@@ -76,6 +77,15 @@ function CustomerProfile() {
             setStatus(data.orders.map((row) => row.order_status))
             setDate(data.orders.map((row) => row.order_date));
             setOrderID(data.orders.map((row) => row.order_id));
+            setVerified(data.orders.map((row) => row.verified))
+
+            if(data.profile[0].verified == 1){
+              setVerified('✅ Verified')
+            }
+            else{
+              setVerified('❌ Unverified')
+            }
+
           })
           .catch(error => console.error(error))
           }, []
@@ -114,19 +124,17 @@ function CustomerProfile() {
 
       <div className="w-screen min-h-screen flex flex-col ml-[375px] items-start">
         <div className="flex flex-row mt-[50px]">
-          <input
-            className="bg-[#D9D9D9] h-[30px] w-[225px] rounded-tl-sm rounded-bl-sm min-w-[50px] border-[1.5px] border-black placeholder:text-black"
-            placeholder=" Search"
-          ></input>
-          <button className="h-[30px] w-[40px] border-l-0 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black justify-center items-center px-2 hover:bg-[#F3F3F3]">
-            <Icon icon="carbon:search" className="h-5 w-5" />
-          </button>
+          
+
         </div>
         <div>
         </div>
-        <div className="font-bold text-2xl mt-5">Customer</div>
+        <div className="font-bold text-2xl mt-5">Customer Profile</div>
 
-        <div className="bg-[#D9D9D9] h-[150px] w-5/12 border-[1.5px] border-black mt-[20px] font-bold shadow-md rounded-sm">
+        <div className="font-bold text-3xl mt-10">{profile.last_name}, {profile.first_name}</div>
+        <div className = "text-xl">{verified}</div>
+
+        <div className="bg-[#D9D9D9] h-[150px] w-10/12 border-[1.5px] border-black mt-[10px] font-bold shadow-md rounded-sm">
           <div className="flex">
             <div className="rounded-full border-2 bg-white h-[100px] w-[100px] ml-8 mt-5 border-white "></div>
             

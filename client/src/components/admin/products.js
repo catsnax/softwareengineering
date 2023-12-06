@@ -222,12 +222,12 @@ function Products() {
         </div>
         <div className="flex flex-col w-10/12 shadow-lg mt-2">
           <div className="flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
-            <div className="flex-[0.5]"></div>
-       
+            
             <div className="flex-1">Class Type</div>
             <div className="flex-1">Quantity</div>
             <div className="flex-1">Measurement Type</div>
             <div className="flex-1">Price</div>
+            <div className="flex-[0.5]"></div>
           </div>
 
           <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
@@ -236,17 +236,16 @@ function Products() {
             {if(value == 1){
               return(
               <div key={index} className="flex flex-row w-full mt-5">
-              <div className="">
               
-                <button onClick = {() => handleDelete(index)} className="ml-6 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
-                  <Icon icon="material-symbols:delete-outline" className='h-6 w-6'/> </button>
-
-            </div>
             
-              <div className="flex-1 ml-14">{type[index]}</div>
-              <div className="flex-1 ml-4 mr-4">{quantity[index]}</div>
-              <div className="flex-1 mr-12">{measure[index]}</div>
-              {(inputChecker == true) ?  <div class = "flex mr-[40px] ml-10"><input value= {newInputValues[index]} onChange={(e) => handleInputChange(index, e.target.value)} class = "h-8 rounded-md text-center bg-[#3BC4AF] w-32 mr-1"></input> <span>/{measure[index]}</span></div>  : <span className="flex-1">{price[index]}/{measure[index]}</span>}
+              <div className="flex-1">{type[index]}</div>
+              <div className="flex-1">{quantity[index]}</div>
+              <div className="flex-1">{measure[index]}</div>
+              {(inputChecker == true) ?  <div class = "flex mr-[40px]"><input value= {newInputValues[index]} onChange={(e) => handleInputChange(index, e.target.value)} class = "h-8 rounded-md text-center bg-[#3BC4AF] w-32 mr-1"></input> <span>/{measure[index]}</span></div>  : <span className="flex-1">{price[index]}/{measure[index]}</span>}
+              <div className="">
+                <button onClick = {() => handleDelete(index)} className="mr-28  mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
+                  <Icon icon="material-symbols:delete-outline" className='h-6 w-6'/> </button>
+              </div>
             </div>
             )}}            
           } 

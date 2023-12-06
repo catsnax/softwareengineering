@@ -90,6 +90,20 @@ app.post('/employee', (req, res) => {
 
 })
 
+app.post('/employeeprofile', (req, res) => {
+    let query = `SELECT * FROM employees WHERE employee_id = ${req.body.userID}`;
+    connection.query(query, (err, results) => {
+        res.send(results);
+    })
+})
+
+app.post('/employeepayslip', (req, res) => {
+    let query = `SELECT payslip.employee_pay, payslip.hours_worked, payslip.time_in, payslip.time_out, payroll.report_date FROM payslip INNER JOIN payroll ON payslip.payroll_id = payroll.payroll_id WHERE payslip.employee_id = ${req.body.userID}`;
+    connection.query(query, (err, results) => {
+        res.send(results);
+    })
+})
+
 app.get('/products', (req, res) => {
     let query = `SELECT * FROM products`;
     connection.query(query, (err, results) => {
@@ -541,7 +555,6 @@ app.get('/salescustomer', (req, res) => {
     query = `SELECT * FROM customers`;
     connection.query(query, (err, results) => {
         res.send(results);
-        console.log(results);
     })
 
 })
@@ -601,6 +614,19 @@ app.post('/payrolldetails', (req, res) => {
     })
 })
 
+app.post('/sidebaremp', (req, res) => {
+    let query = `SELECT * FROM employees WHERE user_id = ${req.body.id}`
+    connection.query(query, (err, results) => {
+        res.send(results);
+    })
+})
+
+app.post('/sidebarcus', (req, res) => {
+    let query = `SELECT * FROM customers WHERE customer_id = ${req.body.id}`
+    connection.query(query, (err, results) => {
+        res.send(results);
+    })
+})
 
 
 

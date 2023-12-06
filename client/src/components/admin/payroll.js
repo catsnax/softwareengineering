@@ -218,7 +218,7 @@ const handleCreate = (event) => {
             <Icon icon="carbon:search" className="h-5 w-5" />
           </button>
         </div>
-        <div className="font-bold text-2xl mt-5">Employee List</div>
+        <div className="font-bold text-2xl mt-5">Payroll</div>
         <div className="flex flex-col w-10/12 mt-5">
           <div className="flex justify-end">
           <Link to="/payroll">
@@ -257,7 +257,7 @@ const handleCreate = (event) => {
             
           })}
           </div>
-\        </div>
+        </div>
          {/* Modal */}
          {isModalOpen && (
                     <div style={modalStyles.modalContainer}>

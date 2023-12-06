@@ -83,6 +83,7 @@ const [lastName, setLastName] = useState([]);
 const [firstName, setFirstName] = useState([]);
 const [department, setDepartment] = useState([]);
 const [position, setPosition] = useState([]);
+const [employeeID, setEmployeeID] = useState([]);
 
 const [hoursDifference, setHoursDifference] = useState([]);
 
@@ -91,6 +92,9 @@ const receiveVariable = (variable1, variable2) => {
   console.log(variable2);
 }
 
+const handleRedirect = (index) => {
+  localStorage.setItem('EmployeeID', employeeID[index]);
+}
 
 useEffect(() => {
     fetch('http://localhost:4000/employee')
@@ -100,6 +104,7 @@ useEffect(() => {
       setFirstName(data.map((row) => row.first_name));
       setDepartment(data.map((row) => row.department))
       setPosition(data.map((row) => row.position));
+      setEmployeeID(data.map((row) => row.employee_id))
 })} , [])
 
 
@@ -133,6 +138,7 @@ const handleCreate = (event) => {
             className="bg-[#D9D9D9] h-[30px] w-[225px] rounded-tl-sm rounded-bl-sm min-w-[50px] border-[1.5px] border-black placeholder:text-black"
             placeholder=" Search"
           ></input>
+          
           <button className="h-[30px] w-[40px] border-l-0 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black justify-center items-center px-2 hover:bg-[#F3F3F3]">
             <Icon icon="carbon:search" className="h-5 w-5" />
           </button>
@@ -165,9 +171,11 @@ const handleCreate = (event) => {
             return(
             <div className="flex flex-row w-full mt-5">
                 <div className="">
-                <Link to="/employee"><button className=" rounded-sm ml-4 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
+                <Link to="/employeeprofile">
+                <button onClick = { () => handleRedirect(index)} className=" rounded-sm ml-4 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
                 <Icon icon="ph:play" className='h-6 w-6'/>
-                </button></Link>
+                </button>
+                </Link>
                 </div>
               <div className="flex-1">{lastName[index]}, {firstName[index]}</div>
               <div className="flex-1">{department[index]}</div>

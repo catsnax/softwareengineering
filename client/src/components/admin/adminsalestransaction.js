@@ -122,9 +122,10 @@ function AdminSalesTransaction(){
       let dummyQuantity = data[0].product.map((row) => row.total_quantity);
       let dummyClass = data[0].product.map((row) => row.class)
       let dummyMeasure = data[0].product.map((row) => row.measurement_type)
+      let visibility = data[0].product.map((row) => row.visibility)
 
       for(let i = 0 ; i < dummyQuantity.length; i++){
-        if(dummyQuantity[i] < 50){
+        if(dummyQuantity[i] < 50 && visibility[i] == 1){
           toast.success( `Class ${dummyClass[i]} has less than 50 ${dummyMeasure[i]}`, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 10000,

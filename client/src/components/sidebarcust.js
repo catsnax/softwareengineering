@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from '../images/shebalogo_nobg.png';
 import { Icon } from '@iconify/react';
 
 function CustomerSidebar() {
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [verified, setVerified] = useState('')
 
     const handleLogout = ( (parameter) =>{
         let tester = window.confirm("Are you sure you want to logout?")
@@ -15,6 +19,31 @@ function CustomerSidebar() {
     const activeLinkStyle = {
       backgroundColor: '#3BC4AF',
     };
+
+    useEffect(() => {
+      const url = 'http://localhost:4000/sidebarcus';
+        fetch(url, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id:localStorage.getItem('customerID')})
+        })
+        .then(response => response.json())
+        .then((data) => {
+          console.log(data);
+          setFirstName(data[0].first_name);
+          setLastName(data[0].last_name);
+          if(data[0].verified == 1){
+            setVerified('✅ Verified')
+          }
+          else{
+            setVerified('❌ Unverified')
+          }
+        })
+        .catch(error => console.error(error))
+        
+    }, [])
     
     return (
       <div className='flex-col bg-[#303535] items-center flex w-[250px] h-[100%] fixed rounded'>
@@ -26,8 +55,8 @@ function CustomerSidebar() {
           />
         </div>
         <div className="rounded-full border-2 bg-white h-40 w-40 min-h-40 mb-8 mt-10 border-white"></div>
-        <div className="text-xl font-bold text-white">Aaron Macias</div>
-        <div className="text-lg text-white">Marketing Head</div>
+        <div className="text-xl font-bold text-white">{firstName} {lastName}</div>
+        <div className="text-lg text-white">{verified}</div>
         <div className="mt-[20px]  rounded-lg w-11/12 bg-white h-[2px]"></div>
   
         <div className='w-full mt-10'>
