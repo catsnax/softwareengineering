@@ -22,7 +22,7 @@ const modalStyles = {
       border: '1px solid #ccc', // Add a border to the modal
       borderRadius: '5px',
       padding: '20px',
-      width: '500px',
+      width: '600px',
       height: '550px',
       boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     },
@@ -49,21 +49,41 @@ const [lastName, setLastName] = useState([]);
 const [firstName, setFirstName] = useState([]);
 const [department, setDepartment] = useState([]);
 const [position, setPosition] = useState([]);
+const [employeeID, setEmployeeID] = useState([]);
+
+const [selectedEmployee, setSelectedEmployee] = useState([])
+const [selectedPayment, setSelectedPayment] = useState([]);
 
 const [hoursDifference, setHoursDifference] = useState([]);
+const [names, setNames] = useState([]);
+
+const [payRates, setPayRates] = useState([]);
 
 const receiveVariable = (variable1, variable2) => {
-  console.log(variable1);
-  console.log(variable2);
+  setNames(variable1.map((row) => row.Name))
+  setHoursDifference(variable2);
 }
+
+const handleInputChange = (index, newValue) => {
+  const updatedValues = [...selectedEmployee];
+  updatedValues[index] = newValue
+  setSelectedEmployee(updatedValues);
+  };
 
 
 useEffect(() => {
-    fetch('http://localhost:4000/employee')
+    fetch('http://localhost:4000/payroll')
     .then(res => {return res.json()})
     .then(data => {
+      console.log(data);
+      setLastName(data.map((row) => row.last_name));
+      setFirstName(data.map((row) => row.first_name))
+      setEmployeeID(data.map((row) => row.employee_id))
+      setSelectedEmployee(data.map((row) => row.employee_id));
+      setPayRates(data.map((row) => row.active_salary));
       
-})} , [])
+}
+)}, [])
 
 
 const handleCreate = (event) => {
@@ -72,7 +92,7 @@ const handleCreate = (event) => {
         if(tester == true){
           event.preventDefault();
           console.log("submitted");
-          const url = 'http://localhost:4000/employee';
+          const url = 'http://localhost:4000/payroll';
           fetch(url, {
               method: 'POST',
               headers: {
@@ -86,6 +106,8 @@ const handleCreate = (event) => {
     setTimeout(() => {
     }, 2000);
   };
+
+  
 
   return (
     <div className="w-screen min-h-screen flex">
@@ -152,7 +174,35 @@ const handleCreate = (event) => {
                         
                               
                           <ExcelReader onDataLoaded = {receiveVariable}></ExcelReader>
-                            
+                          <table class=" min-w-full table-auto">
+                              <thead>
+                                <tr className = "text-center">
+                                  <th>Name</th>
+                                  <th>Hours Worked</th>
+                                  <th>Employee </th>
+                                  <th>Total Payment</th>
+                                </tr>
+                              </thead>
+                              <tbody className = "text-center">
+                                {hoursDifference.map((record, index) => (
+                                  <tr key={index}>
+                                    <td>{names[index]}</td>
+                                    <td>{hoursDifference[index]} hours</td>
+                                    <select value = {selectedEmployee[index]} onChange={(e) => handleInputChange(index, e.target.value)}>
+                                    {lastName.map((value, index) => {
+                                      return(
+                                        <option value = {employeeID[index]}> {lastName[index]}, {firstName[index]}</option>
+                                      )
+
+                                    })}
+                                    </select>
+                                    <td>P{payRates[index]}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table> 
+
+
                             <div className='flex flex-col items-center gap-6 mt-[0px]'>
                               <button onClick = {handleCreate}> Submit </button>
                               <button onClick={closeModal} className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end">Close </button>

@@ -529,7 +529,7 @@ app.post('/salesreport', (req, res) => {
         })
     }
     else if(req.body.changeOption == false){
-        dateQuery = `SELECT order_id, order_date, total_amount, order_status, orders.customer_id, last_name, first_name FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id WHERE (DATE(order_date) BETWEEN  '${req.body.fromDate}' AND '${req.body.toDate}') AND (order_status = 'Delivered' OR order_status = 'Shipped' OR order_status = 'Unpaid')`
+        dateQuery = `SELECT order_id, order_date, total_amount, order_status, orders.customer_id, last_name, first_name FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id WHERE (DATE(order_date) BETWEEN  '${req.body.fromDate}' AND '${req.body.toDate}') AND (order_status = 'Delivered' OR order_status = 'Shipped')`
         connection.query(dateQuery, (err, result) => {
         console.log(result);
         res.send(result);
@@ -562,6 +562,18 @@ app.post('/changeprice', (req, res) => {
 
 })
 
+app.get('/payroll', (req, res) => {
+    const query = `SELECT * FROM employees`;
+    connection.query(query, (err, results) => {
+        res.json(results);
+    })
+
+})
+
+app.post('/payroll', (req, res) => {
+    console.log(req.body);
+
+})
 
 
 

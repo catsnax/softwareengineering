@@ -141,14 +141,13 @@ const handleCreate = (event) => {
         <div className="flex flex-col w-10/12 mt-5">
           <div className="flex justify-end">
           <Link to="/payroll">
-            <button className="h-[30px] w-[200px] mr-1 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]">
+            <button className="h-[30px] w-[130px] mr-1 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]">
              Payroll
             </button>
           </Link>
             <button className="h-[30px] w-[150px] mr-2 bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick = {openModal}>
             Register Employee
             </button>
-            <ExcelReader onDataLoaded = {receiveVariable}></ExcelReader>
           </div>
         </div>
         <div className="flex flex-col w-10/12 shadow-lg mt-5">
@@ -216,7 +215,7 @@ const handleCreate = (event) => {
                               </div>
 
                               <div className="flex gap-4">
-                              <h2 className="">Salary </h2>
+                              <h2 className="">Rate per hour </h2>
                                 <input value = {newSalary} onChange = {(event) => handleSalaryChange(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
                               </div>
 

@@ -5,6 +5,7 @@ const ExcelReader = ({ onDataLoaded }) => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [startingTime, setStartingTime] = useState([]);
   const [endingTime, setEndingTime] = useState([]);
+  const [names, setNames] = useState([]);
 
   const [hoursDifference, setHoursDifference] = useState([]);
   
@@ -82,6 +83,7 @@ useEffect(() => {
 
     setStartingTime(jsonData.map((row) => row['Clock In']));
     setEndingTime(jsonData.map((row) => row['Clock Out']));
+    setNames(jsonData.map((row) => row['Name']))
 
 
     let dummyStarting = (jsonData.map((row) => row['Clock In']));
@@ -117,27 +119,28 @@ useEffect(() => {
       <input type="file" onChange={handleFileUpload} />
       {attendanceData && (
         <div>
-          <h2>Attendance Data:</h2>
-          <table>
+          <h2 className = "mt-4 text-center">Attendance Data:</h2>
+          <table class="mt-2 min-w-full table-auto">
             <thead>
-              <tr>
+              <tr className = "text-center">
                 <th>Name</th>
                 <th>Clock In</th>
                 <th>Clock Out</th>
-                <th>Number of Hours</th>
+                <th>Hours Worked</th>
               </tr>
             </thead>
-            <tbody>
-              {attendanceData.map((record, index) => (
+            <tbody className = "text-center">
+              {hoursDifference.map((record, index) => (
                 <tr key={index}>
-                  <td>{record.Name}</td>
+                  <td>{names[index]}</td>
                   <td>{startingTime[index]}</td>
                   <td>{endingTime[index]}</td> 
-                  <td>difference {hoursDifference[index]}</td>
+                  <td>{hoursDifference[index]} hours</td>
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table> 
+          <div>---------------------------------------------------------------------------</div>
         </div>
       )}
     </div>

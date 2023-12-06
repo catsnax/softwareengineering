@@ -152,6 +152,7 @@ const handleSearch = (event) => {
             <div className="flex-1">Customer Name</div>
             <div className="flex-1">Order Date</div>
             <div className="flex-1">Order Cost</div>
+            <div className = "flex-1"> Order Status</div>
           </div>
 
           <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
@@ -164,6 +165,7 @@ const handleSearch = (event) => {
               <div className="flex-1 ml-20">{lastNames[index]}, {firstNames[index]}</div>
               <div className="flex-1">{new Date(orderDates[index]).toLocaleDateString('en-US', options)}</div>
               <div className="flex-1">P{orderCost[index]}</div>
+              <div className = "flex-1">{orderStatus[index]}</div>
             </div>
             )
           })}
