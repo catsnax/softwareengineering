@@ -21,6 +21,7 @@ import ImageUploader from './components/admin/imageupload';
 import CustomerProfile from './components/customer/customerprofile'
 import EmployeeList from './components/admin/employeelist';
 import SalesReport from './components/salesreport';
+import Payroll from './components/admin/payroll'
 
 import { MyContextProvider } from './components/MyContext';
 
@@ -84,6 +85,7 @@ function App() {
       <Route path = '/customerprofile' element = {<CustomerProfile></CustomerProfile>}></Route>
       <Route path = '/employeelist' element = {<EmployeeList></EmployeeList>}></Route>
       <Route path = '/salesreport' element = {<SalesReport></SalesReport>}></Route>
+      <Route path = '/payroll' element = {<Payroll></Payroll>}></Route>
 
     </Routes>
     

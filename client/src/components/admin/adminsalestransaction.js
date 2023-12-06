@@ -58,6 +58,7 @@ function AdminSalesTransaction(){
 
       const[selectedCustomer, setSelectedCustomer] = useState();
       
+      
       let sum = 0
       let initialSum = 0;
 

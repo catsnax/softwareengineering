@@ -31,7 +31,7 @@ const modalStyles = {
     },
   };
 
-const EmployeeList = () => {
+const Payroll = () => {
 
 //modal functions
 const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,40 +42,6 @@ const openModal = () => {
     setIsModalOpen(false);
   };
 
-//create new employee variables
-const [newLastName, setNewLastName] = useState("");
-const [newFirstName, setNewFirstName] = useState("");
-const [newDepartment, setNewDepartment] = useState("");
-const [newPosition, setNewPosition] = useState("");
-const [newAddress, setNewAddress] = useState("")
-const [newSalary, setNewSalary] = useState("");
-const [newTimeIn, setNewTimeIn] = useState("");
-const [newTimeOut, setNewTimeOut] = useState("");
-
-const handleInputLast = (event) =>{
-    setNewLastName(event.target.value);
-  }
-const handleInputFirst = (event) =>{
-    setNewFirstName(event.target.value);
-  }
-const handleDepartment = (event) => {
-    setNewDepartment(event.target.value)
-}
-const handlePositionChange = (e) => {
-    setNewPosition(e.target.value);
-  };
-const handleAddressChange = (e) => {
-    setNewAddress(e.target.value);
-  };
-const handleSalaryChange = (e) => {
-    setNewSalary(e.target.value);
-  };
-const handleTimeInChange = (e) => {
-    setNewTimeIn(e.target.value);
-  };
-const handleTimeOutChange = (e) => {
-    setNewTimeOut(e.target.value);
-  };
 
 
 //displaying employee variables
@@ -96,10 +62,7 @@ useEffect(() => {
     fetch('http://localhost:4000/employee')
     .then(res => {return res.json()})
     .then(data => {
-      setLastName(data.map((row) => row.last_name));
-      setFirstName(data.map((row) => row.first_name));
-      setDepartment(data.map((row) => row.department))
-      setPosition(data.map((row) => row.position));
+      
 })} , [])
 
 
@@ -115,7 +78,7 @@ const handleCreate = (event) => {
               headers: {
               'Content-Type': 'application/json'
               },
-              body: JSON.stringify({newLastName:newLastName, newFirstName:newFirstName, newAddress:newAddress, newDepartment:newDepartment, newPosition:newPosition, newSalary:newSalary, newTimeIn:newTimeIn, newTimeOut:newTimeOut})
+              body: JSON.stringify({})
           })
           .then(response => response.json())
           .catch(error => console.error(error))
@@ -162,7 +125,7 @@ const handleCreate = (event) => {
           <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
           
 
-          {lastName.map((value, index) => {
+          {/*}{lastName.map((value, index) => {
             return(
             <div className="flex flex-row w-full mt-5">
                 <div className="">
@@ -178,7 +141,7 @@ const handleCreate = (event) => {
             )
 
             
-          })}
+          })}*/}
           </div>
           {/* Additional employee entries can be added as needed */}
         </div>
@@ -190,45 +153,7 @@ const handleCreate = (event) => {
                           <div className="text-center text-xl font-bold mb-9">Register Employee</div>
                           <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
                         
-                              <div className="flex gap-4">
-                              <h2 className="">Last Name </h2>
-                                <input value = {newLastName} onChange = {(event) => handleInputLast(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
-                              </div>
-
-                              <div className="flex gap-4">
-                              <h2 className="">First Name </h2>
-                                <input value = {newFirstName} onChange = {(event) => handleInputFirst(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
-                              </div>
-
-                              <div className="flex gap-4">
-                              <h2 className="">Address</h2>
-                                <input value = {newAddress} onChange = {(event) => handleAddressChange(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
-                              </div>
-
-                              <div className="flex gap-4">
-                              <h2 className="">Department </h2>
-                                <input value = {newDepartment} onChange = {(event) => handleDepartment(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
-                              </div>
-
-                              <div className="flex gap-4">
-                              <h2 className="">Position </h2>
-                                <input value = {newPosition} onChange = {(event) => handlePositionChange(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
-                              </div>
-
-                              <div className="flex gap-4">
-                              <h2 className="">Salary </h2>
-                                <input value = {newSalary} onChange = {(event) => handleSalaryChange(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
-                              </div>
-
-                              <div className="flex gap-4">
-                              <h2 className="">Working Schedule Time In </h2>
-                                <input type= "time" value = {newTimeIn} onChange = {(event) => handleTimeInChange(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
-                              </div>
-
-                              <div className="flex gap-4">
-                              <h2 className="">Working Schedule Time Out </h2>
-                                <input type = "time" value = {newTimeOut} onChange = {(event) => handleTimeOutChange(event)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
-                              </div>
+                              
                            
                             
                             <div className='flex flex-col items-center gap-6 mt-[0px]'>
@@ -245,4 +170,4 @@ const handleCreate = (event) => {
   );
 };
 
-export default EmployeeList;
+export default Payroll;

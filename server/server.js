@@ -422,17 +422,22 @@ app.get('/repack', (req, res) => {
 
 app.post('/details', (req, res) => {
     //console.log(req.body);
-    let query = `SELECT order_item.order_id, orders.order_receipt, item_price, quantity, total_price, class, measurement_type FROM order_item INNER JOIN products ON order_item.product_id = products.product_id INNER JOIN orders ON orders.order_id = order_item.order_id WHERE order_item.order_id = ${req.body.id}`
+    let query = `SELECT order_item.order_id, orders.order_receipt, item_price, quantity, order_item.item_price, total_price, class, measurement_type FROM order_item INNER JOIN products ON order_item.product_id = products.product_id INNER JOIN orders ON orders.order_id = order_item.order_id WHERE order_item.order_id = ${req.body.id}`
     connection.query(query, (err, results) => {
         res.send(results);
-        console.log(results);
+
         })
 }) 
 
+app.post('/statusdetails', (req, res) => {
+    let query = `SELECT employees.last_name, employees.first_name, status_log.new_order_status, status_log.status_date, status_log.user_id FROM status_log INNER JOIN employees ON status_log.user_id = employees.user_id WHERE order_id = ${req.body.id}`
+    connection.query(query, (err, results) => {
+        console.log(results);
+        res.send(results);
+    })
 
 
-
-
+})
 
 app.post('/regcus', (req, res) => {
     const query = `INSERT INTO customers(last_name, first_name, contact_number, fax_number, ship_address, bill_address, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
@@ -532,6 +537,20 @@ app.get('/salescustomer', (req, res) => {
 
 })
 
+app.post('/changeprice', (req, res) => {
+    console.log(req.body);
+    //creat price log table needed
+    query = `SELECT * from products`
+    connection.query(query, (err, results) => {
+        for(let i = 0; i < results.length; i++){
+            if(results[i].price != parseInt(req.body.newPrices[i])){
+                updateQuery = `UPDATE products SET price = ${parseInt(req.body.newPrices[i])} WHERE product_id = ${results[i].product_id}`;
+                connection.execute(updateQuery);
+            }
+        }
+    })
+
+})
 
 
 

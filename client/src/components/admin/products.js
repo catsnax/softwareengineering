@@ -67,6 +67,10 @@ function Products() {
     setSelectedValue(event.target.value);
   };
 
+  let checker= false;
+  let zeroChecker = false;
+
+
     useEffect(() => {
         fetch('http://localhost:4000/products')
         .then(res => {return res.json()})
@@ -147,8 +151,6 @@ function Products() {
           }
   }
 
-  
-
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -163,6 +165,26 @@ function Products() {
     (inputChecker == true) ? setInputChecker(false): setInputChecker(true)
     console.log(inputChecker);
   }
+ 
+  const handleSubmit = (event) => {
+    let tester = window.confirm("Confirm Save?")
+    //create confirmation modal of sales order
+    if(tester == true){
+    console.log("submitted");
+    const url = 'http://localhost:4000/changeprice';
+    fetch(url, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({newPrices:newInputValues, id:id})
+    })
+    .then(response => response.json())
+    .catch(error => console.error(error))
+  }
+  }
+  
+  
 
   return (
     <div className="w-screen min-h-screen flex">
@@ -230,7 +252,7 @@ function Products() {
           } 
         )}
         </div>
-        {(inputChecker == true) ? <button className = "bottom-0 w-full text-xl p-4 delay-30 w-10/12 bg-[#3BC4AF] h-[60px] text-white rounded-sm"> Save Changes</button> : <span></span>}
+        {(inputChecker == true) ? <button onClick = {handleSubmit} className = "bottom-0 w-full text-xl p-4 delay-30 w-10/12 bg-[#3BC4AF] h-[60px] text-white rounded-sm"> Save Changes</button> : <span></span>}
 
       </div>
     </div>

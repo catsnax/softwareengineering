@@ -23,8 +23,8 @@ const modalStyles = {
     border: '1px solid #ccc', // Add a border to the modal
     borderRadius: '5px',
     padding: '20px',
-    width: '500px',
-    height: '700px',
+    width: '600px',
+    height: '800px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     
   },
@@ -49,6 +49,9 @@ function Customer() {
   const [itemQuantity, setItemQuantity] = useState([]);
   const [itemMeasure, setItemMeasure] = useState([]);
 
+  const [productPrice, setProductPrice] = useState([]);
+
+
   const [orderReceipt, setOrderReceipt] = useState("")
 
     const [id, setID] = useState(localStorage.getItem("customerID"));
@@ -58,6 +61,11 @@ function Customer() {
     const [totalAmount, setTotal] = useState([]);
     const [status, setStatus] = useState([]);
     const [orderID, setOrderID] = useState([]);
+
+  const[employeeLast, setEmployeeLast] = useState([]);
+  const [employeeFirst, setEmployeeFirst] = useState([]);
+  const [statusDates, setStatusDates] = useState([]);
+  const [statusChange, setStatusChange] = useState([]);
 
     useEffect(() => {
         const url = 'http://localhost:4000/customer';
@@ -83,6 +91,7 @@ function Customer() {
     )
 
     const openModal = (index) => {
+      handleHistory(index);
       const url = 'http://localhost:4000/details';
       fetch(url, {
           method: 'POST',
@@ -93,15 +102,33 @@ function Customer() {
       })
       .then(response => response.json())
       .then((data) => {
-        setOrderReceipt(data[0].order_receipt);
+        setOrderReceipt(data[0].order_receipt)
         setItemClass(data.map((row) => row.class));
         setItemQuantity(data.map((row) => row.quantity))
         setItemPrice(data.map((row) => row.total_price))
-        setItemMeasure(data.map((row) => row.measurement_type))
-        setModalOpen(true);
-      })
+        setProductPrice(data.map((row) =>  row.item_price))
+        setModalOpen(true);})
       .catch(error => console.error(error))
-      }  
+    }  
+
+  const handleHistory = (index) => {
+    const url = 'http://localhost:4000/statusdetails';
+      fetch(url, {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({id:index})
+      })
+      .then(response => response.json())
+      .then((data) => {
+        setEmployeeLast(data.map((row) => row.last_name));
+        setEmployeeFirst(data.map((row) => row.first_name));
+        setStatusChange(data.map((row) => row.new_order_status));
+        setStatusDates(data.map((row) => row.status_date));
+        })
+      .catch(error => console.error(error))
+  }
 
     const closeModal = () => {
       setModalOpen(false);
@@ -177,28 +204,44 @@ function Customer() {
               <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
                 {/* Add input fields for editing */}
 
-                <div className="flex flex-row bg-[#D9D9D9] w-[460px] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
-            <div className="flex"></div>
-
-            
-       
-            <div className="flex-1 ml-2">Class</div>
-            <div className="flex-1">Quantity Order</div>
-            <div className="flex-1">Total Price</div>
+                <div className="flex flex-row bg-[#D9D9D9] w-[550px] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
+              <div className="flex-1 ml-4">Class</div>
+              <div className="flex-1">Product Price</div>
+              <div className="flex-1">Quantity Order</div>
+              <div className="flex-1">Total Price</div>
           </div>
                 {itemClass.map((value, index) => {
                   return(
-                  <div className='flex ml-2 flex-row w-full mt-2'>
+                  <div className='flex ml-[28px] flex-row w-full mt-2'>
                   <div className='flex-1'>{itemClass[index]}</div>
-                  <div className='flex-1'>{itemQuantity[index]} {itemMeasure[index]}</div>
+                  <div className='flex-1'>P{productPrice[index]}</div>
+                  <div className='flex-1'>{itemQuantity[index]}</div>
                   <div className='flex-1'>P{itemPrice[index]}</div>
                   
                   </div>
                 )})}
 
-                <h2 className = "text-center">PROOF OF PAYMENT </h2>
-                {(orderReceipt != null) ? 
-                (<div className = "self-center mt-[-20px]" ><img  width = "350" height = "100" src = {require(`${orderReceipt}`)} alt = "myimage1"></img></div>): <span> No Receipt Found</span>}
+<div>-----------------------------------------------------------------------------</div>
+
+<h2 className="text-center text-xl font-bold mb-2">ORDER STATUS HISTORY </h2>
+
+<div className="flex flex-row bg-[#D9D9D9] w-[550px] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
+    <div className="flex-1 ml-14">Status</div>
+    <div className="flex-1">Date</div>
+</div>
+
+{statusDates.map((value, index) => {
+                  return(
+                  <div className='flex ml-[28px] flex-row w-full gap- mt-2'>
+                    <div className='flex-1'>{statusChange[index]}</div>
+                    <div className='flex-1'>{new Date(statusDates[index]).toLocaleDateString('en-US', options)}</div>
+                  </div>
+                )})}
+
+<div>-----------------------------------------------------------------------------</div>
+<h2 className="text-center text-xl font-bold mb-2">PROOF OF PAYMENT </h2>
+{(orderReceipt != null) ? 
+(<div className = "self-center mt-[-20px]" ><img  width = "350" height = "100" src = {require(`${orderReceipt}`)} alt = "myimage1"></img></div>): <span className = "text-center"> No Receipt Found</span>}
                 
                 
                 {/* Add more input fields for editing */}
