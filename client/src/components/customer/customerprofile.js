@@ -60,6 +60,39 @@ function CustomerProfile() {
     const [orderID, setOrderID] = useState([]);
     const [verified, setVerified] = useState('Unverified');
 
+    const[fax, setFax] = useState();
+    const[phone, setPhone] = useState();
+    const[billAddress, setBillAddress] = useState();
+    const[shipAddress, setShipAddress] = useState()
+
+    const [editButton, setEditButton] = useState(false);
+
+    const handleEdit = (() => {
+      if(editButton == false){
+        setEditButton(true)
+      }
+      else{
+        setEditButton(false);
+      }
+  })
+
+  const handleDetails = (() => {
+    let tester = window.confirm("Try to press")
+          //create confirmation modal of sales order
+          if(tester == true){
+    const url = 'http://localhost:4000/editcustomer';
+      fetch(url, {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({id:id, fax:fax, phone:phone, billAddress: billAddress, shipAddress:shipAddress})
+      })
+      .then(response => response.json())
+      .catch(error => console.error(error))
+  }}) 
+  
+
     useEffect(() => {
         const url = 'http://localhost:4000/customer';
           fetch(url, {
@@ -72,6 +105,12 @@ function CustomerProfile() {
           .then(response => response.json())
           .then((data) => {
             setProfile(data.profile[0]);
+            setFax(data.profile[0].fax_number)
+            setPhone(data.profile[0].contact_number)
+            setBillAddress(data.profile[0].bill_address)
+            setShipAddress(data.profile[0].ship_address)
+
+
             data.orders.reverse();
             setTotal(data.orders.map((row) => row.total_amount))
             setStatus(data.orders.map((row) => row.order_status))
@@ -134,13 +173,35 @@ function CustomerProfile() {
         <div className="font-bold text-3xl mt-10">{profile.last_name}, {profile.first_name}</div>
         <div className = "text-xl">{verified}</div>
 
+        <button className="h-[30px] w-[150px] ml-[1030px] mr-2 bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick = {handleEdit}>
+            Edit Details
+            </button>
+
         <div className="bg-[#D9D9D9] h-[150px] w-10/12 border-[1.5px] border-black mt-[10px] font-bold shadow-md rounded-sm">
-          <div className="flex">
+          
+          {(editButton == true) ? <div>
+
+             <div className="flex">
             <div className="rounded-full border-2 bg-white h-[100px] w-[100px] ml-8 mt-5 border-white "></div>
-            
+            <div className="flex-col gap-2 ml-[100px] w-[150px] text-left mt-4 whitespace-nowrap">
+              <div className = "mb-2"><span>Fax: </span><input class="rounded-md text-center bg-[#3BC4AF] w-48" value = {fax} onChange = {(event) => setFax(event.target.value)}></input> </div>
+              <div className = "mb-2"><span>Phone: </span><input class="rounded-md text-center bg-[#3BC4AF] w-48" value = {phone} onChange = {(event) => setPhone(event.target.value)}></input> </div>
+              <div className = "mb-2"><span>Bill Address</span><input class="rounded-md text-center bg-[#3BC4AF] w-48" value = {billAddress} onChange = {(event) => setBillAddress(event.target.value)}></input> </div>
+              <div><span>Ship Address</span><input class="rounded-md text-center bg-[#3BC4AF] w-48" value = {shipAddress } onChange = {(event) => setShipAddress(event.target.value)}></input> </div>
+            </div>
+            <div><button className="h-[30px] w-[150px] mt-8 mr-2 bg-[#D9D9D9] ml-48 rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick = {handleDetails} >Save Changes</button></div>
+
+          </div>
+            </div>: 
+          
+          
+          
+          
+          <div>
+             <div className="flex">
+            <div className="rounded-full border-2 bg-white h-[100px] w-[100px] ml-8 mt-5 border-white "></div>
             <div className="flex-col ml-[100px] w-[150px] text-left mt-4 whitespace-nowrap">
-            <div class="">{profile.last_name}, {profile.first_name}</div>
-              
+            <div class="">Name: {profile.last_name}, {profile.first_name}</div>
               <div class="">Fax: {profile.fax_number}</div>
               <div class=" ">Phone No: {profile.contact_number}</div>
             </div>
@@ -148,8 +209,11 @@ function CustomerProfile() {
               <div>Gender: Male</div>
               <div class="">Bill Address: {profile.bill_address}</div>
               <div class="">Ship Address: {profile.ship_address}</div>
+              
             </div>
           </div>
+            </div>}
+
         </div>
 
         <div className="flex flex-col w-10/12 shadow-lg mt-5">

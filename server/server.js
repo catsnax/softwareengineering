@@ -628,6 +628,27 @@ app.post('/sidebarcus', (req, res) => {
     })
 })
 
+app.post('/registeradmin', (req, res) => {
+    let insertQuery = `INSERT INTO admins(username, password, employee_id) VALUES('${req.body.username}', '${req.body.password}', ${req.body.selectedEmployee})`
+    connection.execute(insertQuery);
+
+    let query = `SELECT MAX(user_id) FROM admins`
+    connection.query(query, (err, results) => {
+        let employeeQuery = `UPDATE employees SET user_id = ${results[0][`MAX(user_id)`]} WHERE employee_id = ${req.body.selectedEmployee}`;
+        connection.execute(employeeQuery);
+    })
+
+})
+
+app.post('/editemployee', (req, res) => {
+    let insertQuery = `UPDATE employees SET contact_number = '${req.body.newContact}', department = '${req.body.newDepartment}', position = '${req.body.newPosition}', active_salary = '${req.body.newSalary}', req_time_in = '${req.body.newTimeIn}', req_time_out = '${req.body.newTimeOut}'`
+    connection.execute(insertQuery);
+})
+
+app.post('/editcustomer', (req, res) => {
+    let insertQuery = `UPDATE customers SET contact_number = '${req.body.phone}', fax_number = '${req.body.fax}', bill_address = '${req.body.billAddress}', ship_address = '${req.body.shipAddress}' WHERE customer_id = ${req.body.id}`
+    connection.execute(insertQuery);
+})
 
 
 

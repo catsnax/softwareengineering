@@ -42,6 +42,14 @@ const openModal = () => {
     setIsModalOpen(false);
   };
 
+const [anotherModal, setAnotherModal] = useState(false);
+const openAnotherModal = () => {
+  setAnotherModal(true);
+};
+const closeAnotherModal = () => {
+  setAnotherModal(false);
+};
+
 //create new employee variables
 const [newLastName, setNewLastName] = useState("");
 const [newFirstName, setNewFirstName] = useState("");
@@ -84,6 +92,11 @@ const [firstName, setFirstName] = useState([]);
 const [department, setDepartment] = useState([]);
 const [position, setPosition] = useState([]);
 const [employeeID, setEmployeeID] = useState([]);
+const [adminEmployee, setAdminEmployee] = useState([]);
+
+const [userName, setUserName] = useState();
+const [password, setPassword] = useState();
+const [selectedEmployee, setSelectedEmployee] = useState();
 
 const [hoursDifference, setHoursDifference] = useState([]);
 
@@ -105,6 +118,8 @@ useEffect(() => {
       setDepartment(data.map((row) => row.department))
       setPosition(data.map((row) => row.position));
       setEmployeeID(data.map((row) => row.employee_id))
+      setSelectedEmployee(data[0].employee_id)
+      setAdminEmployee(data.map((row) => row.user_id))
 })} , [])
 
 
@@ -129,6 +144,24 @@ const handleCreate = (event) => {
     }, 2000);
   };
 
+  const handleInputChange = (newValue) => {
+      setSelectedEmployee(newValue)
+      console.log(newValue);
+  }
+
+  const handleAdmin = (() => {
+    const url = 'http://localhost:4000/registeradmin';
+    fetch(url, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({username: userName, password: password, selectedEmployee:selectedEmployee})
+    })
+    .then(response => response.json())
+    .catch(error => console.error(error))
+  })
+
   return (
     <div className="w-screen min-h-screen flex">
       <Sidebar />
@@ -151,9 +184,13 @@ const handleCreate = (event) => {
              Payroll
             </button>
           </Link>
+          <button className="h-[30px] w-[150px] mr-2 bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick = {openAnotherModal}>
+            Register Admin
+            </button>
             <button className="h-[30px] w-[150px] mr-2 bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]" onClick = {openModal}>
             Register Employee
             </button>
+            
           </div>
         </div>
         <div className="flex flex-col w-10/12 shadow-lg mt-5">
@@ -241,6 +278,48 @@ const handleCreate = (event) => {
                             <div className='flex flex-col items-center gap-6 mt-[0px]'>
                               <button onClick = {handleCreate}> Submit </button>
                               <button onClick={closeModal} className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end">Close </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+{anotherModal && (
+                    <div style={modalStyles.modalContainer}>
+                      <div style={modalStyles.modal}>
+                        <div style={modalStyles.modalContent}>
+                          <div className="text-center text-xl font-bold mb-9">Register Employee</div>
+                          <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
+                        
+                              <div className="flex gap-4">
+                              <h2 className="">Username </h2>
+                                <input value = {userName} onChange = {(event) => setUserName(event.target.value)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
+                              </div>
+
+                              <div className="flex gap-4">
+                              <h2 className="">Password</h2>
+                                <input value = {password} onChange = {(event) => setPassword(event.target.value)} className="rounded-lg bg-teal-500 h-6 w-[160px]"/>
+                              </div>
+
+                              <div className = "flex gap-4"> 
+                                <h2> Select Employee</h2>
+                              <select value = {selectedEmployee} onChange = {(event) => {handleInputChange(event.target.value)}}>
+                                {employeeID.map((value, index) => {
+                                  return( 
+                                    (adminEmployee[index] == null) ? <option value={employeeID[index]}> {lastName[index]}, {firstName[index]}</option> : <div></div>)
+                                
+                                  })}
+
+                              
+                              </select>
+                              </div>
+                             
+                           
+                            
+                            <div className='flex flex-col items-center gap-6 mt-[0px]'>
+                              <button onClick = {handleAdmin}> Submit </button>
+                              <button onClick={closeAnotherModal} className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end">Close </button>
                             </div>
                           </div>
                         </div>
